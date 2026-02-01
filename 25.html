@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>3APTURE | Mobile Virtual UX</title>
+    <style>
+        :root { --x: 50%; --y: 50%; --lens-size: 120px; }
+        
+        body { 
+            margin: 0; 
+            background: #050505; 
+            color: #fff; 
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+            height: 100vh; 
+            overflow: hidden;
+            touch-action: none; /* Prevents pull-to-refresh and native scroll while exploring */
+        }
+
+        /* The "Unseen" Layer (The Background) */
+        .base-layer {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, #111 50%, #000 50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+        }
+
+        /* The "Inside" Experience (The Revealed 360 Content) */
+        .reveal-layer {
+            position: absolute;
+            inset: 0;
+            background: url('https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            /* The Lens Effect */
+            -webkit-mask-image: radial-gradient(circle var(--lens-size) at var(--x) var(--y), black 100%, transparent 100%);
+            mask-image: radial-gradient(circle var(--lens-size) at var(--x) var(--y), black 100%, transparent 100%);
+            z-index: 2;
+            transition: mask-image 0.2s ease-out;
+        }
+
+        h1 {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 30vw;
+            font-weight: 900;
+            margin: 0;
+            z-index: 3;
+            mix-blend-mode: difference;
+            pointer-events: none;
+            letter-spacing: -0.05em;
+        }
+
+        /* Mobile UI Elements */
+        .ui-overlay {
+            position: absolute;
+            bottom: env(safe-area-inset-bottom, 30px);
+            left: 0;
+            width: 100%;
+            padding: 0 25px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            z-index: 10;
+            mix-blend-mode: difference;
+        }
+
+        .instruction {
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.7;
+        }
+
+        .branding {
+            font-weight: 900;
+            font-size: 14px;
+            border-bottom: 2px solid #FF3B00;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="base-layer"></div>
+    <div class="reveal-layer" id="lens"></div>
+    
+    <h1>360</h1>
+
+    <div class="ui-overlay">
+        <div class="instruction">Drag to reveal<br>the unseen</div>
+        <div class="branding">3APTURE.AU</div>
+    </div>
+
+    <script>
+        const root = document.documentElement;
+        const lens = document.getElementById('lens');
+
+        function updatePosition(e) {
+            // Support both Mouse and Touch
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            
+            root.style.setProperty('--x', clientX + 'px');
+            root.style.setProperty('--y', clientY + 'px');
+        }
+
+        // Event Listeners for Mobile & Desktop
+        window.addEventListener('mousemove', updatePosition);
+        window.addEventListener('touchmove', (e) => {
+            updatePosition(e);
+            // Visual feedback: Expand lens slightly when touching
+            root.style.setProperty('--lens-size', '140px');
+        }, { passive: false });
+
+        window.addEventListener('touchend', () => {
+            // Contract lens back when touch ends
+            root.style.setProperty('--lens-size', '120px');
+        });
+    </script>
+</body>
+</html>
