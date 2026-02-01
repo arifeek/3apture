@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>3apture</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body {
+  margin: 0;
+  background: #FFFFFF;
+  color: #000;
+  font-family: Helvetica, Arial, sans-serif;
+  overflow: hidden;
+}
+main {
+  height: 100vh;
+  padding: 4vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.logo {
+  position: fixed;
+  top: 3vw;
+  left: 3vw;
+  font-size: 1.5rem;
+}
+.word {
+  font-size: clamp(4rem, 10vw, 9rem);
+  line-height: 0.85;
+  letter-spacing: -0.08em;
+  position: relative;
+}
+.word:nth-child(2) {
+  transform: translateX(12vw);
+}
+.word:nth-child(3) {
+  transform: translateX(-6vw);
+}
+.sub {
+  margin-top: 3rem;
+  font-size: 1rem;
+  max-width: 420px;
+}
+</style>
+</head>
+<body>
+<div class="logo">3apture</div>
+<main>
+  <div class="word">SPACE</div>
+  <div class="word">IS</div>
+  <div class="word">NOT</div>
+  <div class="word">FLAT</div>
+  <div class="sub">
+    We record places as they exist — fractured, layered, real.
+  </div>
+</main>
+</body>
+</html>

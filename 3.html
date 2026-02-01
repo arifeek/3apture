@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>3apture</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root {
+  --bg: #0F1115;
+  --fg: #F4F4F4;
+  --muted: #9A9A9A;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, BlinkMacSystemFont, Inter, sans-serif;
+  overflow: hidden;
+}
+
+main {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  padding: 6vw;
+}
+
+.wordmark {
+  position: absolute;
+  top: 4vw;
+  left: 6vw;
+  font-size: 2.2rem;
+  letter-spacing: -0.05em;
+}
+
+.statement {
+  font-size: clamp(3rem, 6vw, 6rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  max-width: 12ch;
+}
+
+.statement span {
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.sub {
+  margin-top: 2.5rem;
+  font-size: 1.1rem;
+  color: var(--muted);
+  max-width: 420px;
+}
+
+.axis {
+  position: absolute;
+  right: 8vw;
+  top: 10vh;
+  bottom: 10vh;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(255,255,255,0.4),
+    transparent
+  );
+}
+
+.point {
+  position: absolute;
+  right: calc(8vw - 4px);
+  top: 50%;
+  width: 9px;
+  height: 9px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.15s ease-out;
+}
+</style>
+</head>
+
+<body>
+
+<div class="wordmark">3apture</div>
+<div class="axis"></div>
+<div class="point" id="point"></div>
+
+<main>
+  <div>
+    <div class="statement">
+      <span id="l1">Space</span>
+      <span id="l2">is not</span>
+      <span id="l3">flat.</span>
+    </div>
+
+    <div class="sub">
+      3apture records places as volumes you can return to —
+      not images you scroll past.
+    </div>
+  </div>
+</main>
+
+<script>
+const point = document.getElementById("point");
+const l1 = document.getElementById("l1");
+const l2 = document.getElementById("l2");
+const l3 = document.getElementById("l3");
+
+document.addEventListener("mousemove", e => {
+  const x = (e.clientX / window.innerWidth - 0.5) * 30;
+  const y = (e.clientY / window.innerHeight - 0.5) * 30;
+
+  point.style.transform = `translateY(${y}px)`;
+
+  l1.style.transform = `translate(${x * 0.3}px, ${-y * 0.2}px)`;
+  l2.style.transform = `translate(${x * 0.6}px, ${y * 0.1}px)`;
+  l3.style.transform = `translate(${x * 0.9}px, ${y * 0.3}px)`;
+});
+</script>
+
+</body>
+</html>

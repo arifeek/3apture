@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>3apture — Real space, not flat images</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --dark: #1e293b;
+      --light: #f1f5f9;
+      --white: #ffffff;
+      --shadow: rgba(0,0,0,0.08);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+      background: var(--bg);
+      color: var(--dark);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+    }
+    .container {
+      max-width: 1400px;
+      width: 100%;
+      padding: 60px 40px;
+      display: grid;
+      grid-template-columns: 1fr 520px;
+      gap: 100px;
+      align-items: center;
+    }
+    @media (max-width: 1200px) {
+      .container {
+        grid-template-columns: 1fr;
+        gap: 80px;
+        padding: 40px 32px;
+        text-align: center;
+      }
+    }
+    .type {
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #64748b;
+      margin-bottom: 32px;
+    }
+    h1 {
+      font-size: clamp(56px, 8vw, 100px);
+      line-height: 0.95;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+    h1 span { display: block; }
+    .copy {
+      font-size: 20px;
+      line-height: 1.6;
+      color: #475569;
+      max-width: 28rem;
+      margin-bottom: 40px;
+    }
+    .cta {
+      display: inline-flex;
+      padding: 16px 32px;
+      background: var(--dark);
+      color: white;
+      font-size: 15px;
+      font-weight: 500;
+      text-decoration: none;
+      border-radius: 0;
+      letter-spacing: 0.025em;
+      box-shadow: 0 20px 40px rgba(30,41,59,0.2);
+    }
+    .cta:hover {
+      background: #0f172a;
+      transform: translateY(-2px);
+    }
+
+    /* THE VOLUME */
+    .volume {
+      position: relative;
+      width: 100%;
+      height: 600px;
+      perspective: 1200px;
+    }
+    .cube {
+      position: absolute;
+      width: 380px;
+      height: 380px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotateX(20deg) rotateY(0deg) rotateZ(0deg);
+      transform-style: preserve-3d;
+      transition: transform 0.1s ease-out;
+    }
+    .cube:hover {
+      transform: translate(-50%, -50%) rotateX(15deg) rotateY(-10deg) rotateZ(2deg);
+    }
+    .face {
+      position: absolute;
+      width: 380px;
+      height: 380px;
+      background: var(--white);
+      border: 2px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #64748b;
+      backdrop-filter: blur(10px);
+    }
+    .face::before {
+      content: '';
+      position: absolute;
+      inset: 20px;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+    }
+    /* Front */
+    .front { transform: translateZ(190px); }
+    /* Back */  
+    .back { 
+      transform: translateZ(-190px) rotateY(180deg);
+      background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+    }
+    /* Right */
+    .right { 
+      transform: rotateY(90deg) translateZ(190px);
+      background: linear-gradient(90deg, #f1f5f9, #e2e8f0);
+      writing-mode: vertical-rl;
+    }
+    /* Left */
+    .left { 
+      transform: rotateY(-90deg) translateZ(190px);
+      background: var(--dark);
+      color: white;
+    }
+    /* Top */
+    .top { 
+      transform: rotateX(90deg) translateZ(190px);
+      background: linear-gradient(180deg, #ffffff, #f8fafc);
+    }
+    /* Bottom */
+    .bottom { 
+      transform: rotateX(-90deg) translateZ(190px);
+      background: linear-gradient(180deg, #f1f5f9, #cbd5e1);
+    }
+
+    .metrics {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      right: 20px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #94a3b8;
+      font-weight: 500;
+    }
+    .metric {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .metric-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    @media (max-width: 1200px) {
+      .volume { height: 500px; }
+      .cube { width: 320px; height: 320px; }
+      .face { width: 320px; height: 320px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div>
+      <div class="type">3apture</div>
+      <h1>
+        <span>Flat photos</span>
+        <span>lie. Real space</span>
+        <span>cannot.</span>
+      </h1>
+      <p class="copy">
+        People need to feel the room's actual volume before they commit. 
+        3apture captures the full 3D space—walls, ceiling height, light falloff. 
+        They walk it. They measure it. They understand it.
+      </p>
+      <a href="#" class="cta">Capture your first volume</a>
+    </div>
+
+    <div class="volume">
+      <div class="cube" id="cube">
+        <div class="face front">
+          Front view<br>
+          (what they see first)
+        </div>
+        <div class="face back">Back wall<br>3.8m depth</div>
+        <div class="face right">Right side<br>4.2m ceiling</div>
+        <div class="face left">Entry<br>2.1m wide</div>
+        <div class="face top">Overhead<br>92m² total</div>
+        <div class="face bottom">Floorplan<br>Walkable</div>
+      </div>
+      <div class="metrics">
+        <div class="metric">
+          <div class="metric-value">92m²</div>
+          <div>Total volume</div>
+        </div>
+        <div class="metric">
+          <div class="metric-value">4.2m</div>
+          <div>Ceiling height</div>
+        </div>
+        <div class="metric">
+          <div class="metric-value">18</div>
+          <div>Hotspots</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const cube = document.getElementById('cube');
+    let mouseX = 0, mouseY = 0;
+    
+    document.addEventListener('mousemove', (e) => {
+      mouseX = (e.clientX / window.innerWidth) * 20 - 10;
+      mouseY = (e.clientY / window.innerHeight) * 10 - 5;
+      cube.style.transform = `
+        translate(-50%, -50%) 
+        rotateX(${20 + mouseY}deg) 
+        rotateY(${mouseX}deg) 
+        rotateZ(0deg)
+      `;
+    });
+    
+    // Reset on mouse leave
+    document.addEventListener('mouseleave', () => {
+      cube.style.transform = 'translate(-50%, -50%) rotateX(20deg) rotateY(0deg) rotateZ(0deg)';
+    });
+  </script>
+</body>
+</html>

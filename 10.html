@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3apture | Virtual Space Solutions</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-light: #34d399;
+            --primary-dark: #059669;
+            --text: #1c1917;
+            --text-light: #78716c;
+            --background: #ffffff;
+            --background-alt: #fefce8;
+            --border: #e7e5e4;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Manrope', sans-serif;
+            color: var(--text);
+            background-color: var(--background);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        /* Header & Navigation */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2.5rem 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: 800;
+            font-size: 2rem;
+            text-decoration: none;
+            color: var(--text);
+        }
+        
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 1.8rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .logo-icon::after {
+            content: "°";
+            position: absolute;
+            font-size: 1rem;
+            top: 5px;
+            right: 8px;
+        }
+        
+        .logo span {
+            color: var(--primary);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: var(--text-light);
+            font-weight: 600;
+            transition: color 0.3s;
+            padding: 0.5rem 0;
+            position: relative;
+        }
+        
+        nav a::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            background-color: var(--primary);
+            bottom: 0;
+            left: 0;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s;
+        }
+        
+        nav a:hover {
+            color: var(--text);
+        }
+        
+        nav a:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 5rem 0 7rem;
+            text-align: center;
+            background-color: var(--background-alt);
+            border-radius: 24px;
+            margin-bottom: 6rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::after {
+            content: "";
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background-color: rgba(16, 185, 129, 0.05);
+            border-radius: 50%;
+            top: -150px;
+            right: -100px;
+            z-index: 0;
+        }
+        
+        .hero::before {
+            content: "";
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background-color: rgba(16, 185, 129, 0.05);
+            border-radius: 50%;
+            bottom: -100px;
+            left: -80px;
+            z-index: 0;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero h1 {
+            font-size: 3.8rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero h1 span {
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .hero h1 span::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 6px;
+            background-color: rgba(16, 185, 129, 0.2);
+            bottom: 8px;
+            left: 0;
+            z-index: -1;
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 1.2rem 3rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: background-color 0.3s, transform 0.3s;
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+        }
+        
+        .cta-button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+        }
+        
+        /* Features Section */
+        .section-title {
+            text-align: center;
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 4rem;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin-bottom: 8rem;
+        }
+        
+        .feature {
+            text-align: center;
+            padding: 2.5rem;
+            border-radius: 20px;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        
+        .feature:hover {
+            border-color: var(--primary);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05);
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background-color: rgba(16, 185, 129, 0.1);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.8rem;
+            color: var(--primary);
+            font-size: 2.2rem;
+            transform: rotate(45deg);
+            transition: transform 0.5s;
+        }
+        
+        .feature:hover .feature-icon {
+            transform: rotate(0deg);
+        }
+        
+        .feature h3 {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+        }
+        
+        .feature p {
+            color: var(--text-light);
+        }
+        
+        /* Footer */
+        footer {
+            padding: 4rem 0;
+            text-align: center;
+            color: var(--text-light);
+            border-top: 2px solid var(--border);
+            margin-top: 4rem;
+        }
+        
+        .footer-logo {
+            font-weight: 800;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer-logo span {
+            color: var(--primary);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .section-title {
+                font-size: 2.3rem;
+            }
+            
+            header {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            
+            nav ul {
+                gap: 1.5rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero {
+                padding: 3rem 1.5rem 5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <a href="#" class="logo">
+                <div class="logo-icon">3</div>
+                3apture<span>.</span>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="#">Technology</a></li>
+                    <li><a href="#">Solutions</a></li>
+                    <li><a href="#">Pricing</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </nav>
+        </header>
+        
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Capture. Create. <span>Experience.</span></h1>
+                <p>Revolutionary 3D/360 capture technology that transforms physical spaces into virtual experiences anyone can explore from anywhere.</p>
+                <a href="#" class="cta-button">Book a Demo</a>
+            </div>
+        </section>
+        
+        <!-- Features Section -->
+        <section class="features-section">
+            <h2 class="section-title">How It Works</h2>
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">⤧</div>
+                    <h3>Advanced Capture</h3>
+                    <p>Our proprietary technology captures spaces in full 360° with exceptional detail and accuracy.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">◈</div>
+                    <h3>Smart Processing</h3>
+                    <p>AI-powered processing transforms captured data into seamless 3D models and virtual tours.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">↻</div>
+                    <h3>Virtual Exploration</h3>
+                    <p>View and explore captured spaces from any device with intuitive navigation and controls.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer>
+            <div class="footer-logo">3apture<span>.</span></div>
+            <p>Transforming spaces into virtual experiences</p>
+            <p>&copy; 2023 3apture. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>

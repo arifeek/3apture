@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>3apture</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root {
+  --bg: #E6E2DC;
+  --fg: #2B2B2B;
+  --muted: #6F6F6F;
+  --accent: #8FA6B8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, BlinkMacSystemFont, Inter, sans-serif;
+}
+
+main {
+  min-height: 100vh;
+  padding: 4rem 5vw;
+  display: flex;
+  align-items: center;
+}
+
+.container {
+  max-width: 720px;
+}
+
+.logo {
+  font-size: 3rem;
+  letter-spacing: -0.04em;
+}
+
+.rule {
+  width: 72px;
+  height: 2px;
+  background: var(--accent);
+  margin: 2.5rem 0;
+}
+
+h1 {
+  font-size: 2.6rem;
+  font-weight: 400;
+  margin: 0;
+  line-height: 1.15;
+}
+
+h1 span {
+  display: block;
+}
+
+p {
+  margin-top: 1.5rem;
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: var(--muted);
+  max-width: 600px;
+}
+
+.section {
+  margin-top: 3.5rem;
+}
+
+.feature {
+  margin-top: 1.75rem;
+  font-size: 1.05rem;
+  color: var(--fg);
+}
+
+.feature span {
+  color: var(--accent);
+  margin-right: 0.5rem;
+}
+
+.cta {
+  display: inline-block;
+  margin-top: 3.5rem;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--accent);
+  color: var(--fg);
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+</style>
+</head>
+
+<body>
+<main>
+  <div class="container">
+
+    <div class="logo">3apture</div>
+
+    <div class="rule"></div>
+
+    <h1>
+      <span>Step inside</span>
+      <span>the capture.</span>
+    </h1>
+
+    <p>
+      3apture creates immersive spatial records of real-world places —
+      allowing you to experience space beyond flat images, from anywhere.
+    </p>
+
+    <div class="section">
+      <div class="feature"><span>•</span>True-to-scale spatial capture</div>
+      <div class="feature"><span>•</span>Navigate up, down, and through space</div>
+      <div class="feature"><span>•</span>Designed for clarity, not spectacle</div>
+    </div>
+
+    <a class="cta" href="#">Learn more</a>
+
+  </div>
+</main>
+</body>
+</html>
