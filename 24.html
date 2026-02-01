@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>3APTURE | SPATIAL</title>
+    <style>
+        :root {
+            --bg: #000;
+            --ink: #fff;
+            --ch-w: 280px; /* Scaled for mobile screens */
+            --ch-d: 300px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            background: var(--bg);
+            color: var(--ink);
+            font-family: -apple-system, system-ui, sans-serif;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            perspective: 1000px; /* Tighter perspective for mobile depth */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            touch-action: none;
+        }
+
+        /* Branding Overlay */
+        .ui {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            pointer-events: none;
+            z-index: 100;
+        }
+        .logo { font-weight: 900; letter-spacing: 0.6em; font-size: 11px; }
+        .hint { font-size: 9px; letter-spacing: 2px; opacity: 0.4; text-align: center; animation: breathe 2s infinite; }
+
+        /* The 3D Chamber */
+        .chamber {
+            position: relative;
+            width: var(--ch-w);
+            height: var(--ch-w);
+            transform-style: preserve-3d;
+            will-change: transform;
+        }
+
+        .face {
+            position: absolute;
+            border: 0.5px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.02);
+            pointer-events: none;
+        }
+
+        /* Side Walls */
+        .front  { width: var(--ch-w); height: var(--ch-w); transform: translateZ(0px); }
+        .back   { width: var(--ch-w); height: var(--ch-w); transform: translateZ(calc(var(--ch-d) * -1)); background: rgba(255,255,255,0.05); }
+        .bottom { 
+            width: var(--ch-w); height: var(--ch-d); 
+            transform: rotateX(90deg) translateZ(calc(var(--ch-d) / -2)) translateY(calc(var(--ch-d) / 2)); 
+            bottom: calc(var(--ch-d) / -2);
+            background: linear-gradient(to top, rgba(255,255,255,0.1), transparent);
+        }
+
+        /* The Monolith */
+        .mount {
+            position: absolute;
+            width: 100%; height: 100%;
+            transform-style: preserve-3d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: breakout 3.5s forwards cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .layer {
+            position: absolute;
+            font-size: 220px;
+            font-weight: 900;
+            color: var(--ink);
+            user-select: none;
+        }
+        .l1 { transform: translateZ(30px); opacity: 1; }
+        .l2 { transform: translateZ(10px); opacity: 0.4; }
+        .l3 { transform: translateZ(-10px); opacity: 0.1; }
+
+        @keyframes breakout {
+            0% { transform: translateZ(-500px) scale(0.1); opacity: 0; }
+            100% { transform: translateZ(180px) scale(1); opacity: 1; }
+        }
+
+        @keyframes breathe {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.6; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ui">
+        <div class="logo">3APTURE</div>
+        <div class="hint" id="hint">TAP TO SYNC SPATIAL AUDIO</div>
+    </div>
+
+    <div class="chamber" id="chamber">
+        <div class="face front"></div>
+        <div class="face back"></div>
+        <div class="face bottom"></div>
+
+        <div class="mount">
+            <div class="layer l1">3</div>
+            <div class="layer l2">3</div>
+            <div class="layer l3">3</div>
+        </div>
+    </div>
+
+    <script>
+        const chamber = document.getElementById('chamber');
+        const hint = document.getElementById('hint');
+        let tX = 0, tY = 0, cX = 0, cY = 0;
+        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+        // Laptop: Mouse tracking
+        if (!isMobile) {
+            window.addEventListener('mousemove', (e) => {
+                tX = (window.innerWidth / 2 - e.clientX) / 12;
+                tY = (window.innerHeight / 2 - e.clientY) / 12;
+            });
+            hint.innerText = "SCROLL TO EXPLORE";
+        }
+
+        // Mobile: Tilt + Touch Permission
+        async function initSensor() {
+            if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+                const permission = await DeviceOrientationEvent.requestPermission();
+                if (permission === 'granted') {
+                    window.addEventListener('deviceorientation', (e) => {
+                        tX = e.gamma / 1.5;
+                        tY = (e.beta - 45) / 1.5;
+                    });
+                    hint.style.display = 'none';
+                }
+            } else {
+                // Non-iOS or older devices
+                window.addEventListener('deviceorientation', (e) => {
+                    tX = e.gamma / 1.5;
+                    tY = (e.beta - 45) / 1.5;
+                });
+                hint.style.display = 'none';
+            }
+        }
+
+        // Mobile: Touch drag fallback
+        window.addEventListener('touchmove', (e) => {
+            const t = e.touches[0];
+            tX = (window.innerWidth / 2 - t.clientX) / 8;
+            tY = (window.innerHeight / 2 - t.clientY) / 8;
+        });
+
+        // Initialize on first tap
+        document.body.addEventListener('touchstart', initSensor, { once: true });
+
+        function render() {
+            cX += (tX - cX) * 0.08;
+            cY += (tY - cY) * 0.08;
+            chamber.style.transform = `rotateY(${-cX}deg) rotateX(${cY}deg)`;
+            requestAnimationFrame(render);
+        }
+        render();
+    </script>
+</body>
+</html>
