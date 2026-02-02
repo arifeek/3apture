@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>3apture – Reveal the Space</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --accent: #00eaff;
+            --accent-glow: rgba(0, 234, 255, 0.28);
+            --accent-dim: rgba(0, 234, 255, 0.10);
+        }
+
+        body {
+            height: 100dvh;
+            background: #0a0a0a;
+            font-family: 'Helvetica', Arial, sans-serif;
+            overflow: hidden;
+            color: #f0f0f0;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            position: absolute;
+            top: 5vh;
+            left: 5vw;
+            font-size: clamp(1.6rem, 5vw, 2.2rem);
+            font-weight: 900;
+            letter-spacing: -0.05em;
+            color: var(--accent);
+            mix-blend-mode: difference;
+            z-index: 15;
+            pointer-events: none;
+        }
+
+        .scene {
+            width: min(90vmin, 100vw);
+            aspect-ratio: 1 / 1;
+            perspective: 1000px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+        }
+
+        .rectangle {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, #1e1e1e 0%, #111 70%, #0a0a0a 100%);
+            border: 1px solid rgba(80,80,80,0.4);
+            box-shadow: inset 0 0 80px rgba(0,0,0,0.95);
+            position: absolute;
+            inset: 0;
+            transform-style: preserve-3d;
+            animation: frame-reveal 7s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+        }
+
+        @keyframes frame-reveal {
+            0%    { opacity: 1; transform: translateZ(-700px) scale(0.75); border-color: var(--accent); box-shadow: inset 0 0 80px rgba(0,0,0,0.95), 0 0 60px var(--accent-glow); }
+            100%  { opacity: 0; transform: translateZ(100px) scale(1.1); border-color: transparent; box-shadow: none; }
+        }
+
+        .portal-text {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            color: #fff;
+            font-size: clamp(24vmin, 40vmin, 55vmin);
+            font-weight: 900;
+            letter-spacing: -0.07em;
+            mix-blend-mode: difference;
+            pointer-events: none;
+            transform-style: preserve-3d;
+            text-shadow: 0 0 50px var(--accent-glow);
+            animation: sink-and-fade 7s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+        }
+
+        @keyframes sink-and-fade {
+            0%    { opacity: 1; transform: translateZ(-1100px) scale(0.55); filter: blur(0); }
+            100%  { opacity: 0; transform: translateZ(120px) scale(1.06); filter: blur(10px); }
+        }
+
+        .site-content {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            z-index: 1;
+            perspective: 1000px;
+            animation: content-surface 7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        @keyframes content-surface {
+            0%   { opacity: 0; transform: translateZ(-800px) scale(0.2); filter: blur(20px); }
+            40%  { opacity: 0.3; transform: translateZ(-400px) scale(0.5); filter: blur(10px); }
+            100% { opacity: 1; transform: translateZ(0) scale(1); filter: blur(0); }
+        }
+
+        /* Improved Visibility for Main Title */
+        .main-title {
+            font-size: clamp(4rem, 15vw, 10rem); /* Slightly larger */
+            font-weight: 900;
+            letter-spacing: -0.05em;
+            line-height: 0.85; /* Tighter line height for impact */
+            color: #ffffff;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.5); /* Adds depth and punch */
+            margin: 0;
+        }
+
+        .subtitle {
+            font-size: clamp(1.5rem, 6vw, 2.6rem);
+            font-weight: 300;
+            letter-spacing: 0.12em;
+            opacity: 1;
+            margin: 3vh 0 1vh;
+            color: var(--accent);
+        }
+
+        .process-rotator {
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+            font-weight: 400;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 6vh;
+            min-height: 1.5em;
+            opacity: 0;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            transform: translateY(10px);
+        }
+
+        .cta-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2.5vh;
+            width: 100%;
+            pointer-events: auto;
+        }
+
+        .cta {
+            font-size: clamp(0.85rem, 3vw, 1rem);
+            font-weight: 400;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: nowrap;
+            padding: 8px 0;
+            border-bottom: 1px solid transparent;
+        }
+
+        .cta:hover {
+            color: var(--accent);
+            letter-spacing: 0.5em;
+            text-shadow: 0 0 15px var(--accent-glow);
+            border-bottom: 1px solid var(--accent-glow);
+            opacity: 1;
+        }
+
+        footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 3vh 5vw;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5vh;
+            z-index: 10;
+            background: linear-gradient(transparent, rgba(0,0,0,0.5));
+            opacity: 0;
+            animation: footer-fade 2s 6s forwards;
+        }
+
+        @keyframes footer-fade {
+            to { opacity: 0.6; }
+        }
+
+        .footer-logo {
+            font-weight: 900;
+            font-size: 1.2rem;
+            letter-spacing: -0.02em;
+        }
+
+        .footer-logo span { color: var(--accent); }
+
+        footer p {
+            font-size: 0.7rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 768px) {
+            .main-title { line-height: 0.88; }
+            footer { align-items: center; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="logo">3apture</div>
+
+    <div class="scene">
+        <div class="rectangle"></div>
+        <div class="portal-text">360</div>
+    </div>
+
+    <div class="site-content">
+        <h1 class="main-title">Spaces in 3D</h1>
+        <p class="subtitle">Scan • Model • Reveal</p>
+        <div id="process" class="process-rotator">Scan Environment</div>
+        
+        <div class="cta-container">
+            <a href="#" class="cta">Construction Demo →</a>
+            <a href="#" class="cta">Hospitality Demo →</a>
+            <a href="#" class="cta">Real Estate Demo →</a>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-logo">3apture<span>.</span></div>
+        <p>Advanced space capture for the virtual era</p>
+        <p>&copy; 2026 3apture. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const steps = [
+            "Scan Environment",
+            "Generate 3D Model",
+            "View Space Anywhere"
+        ];
+
+        let currentIndex = 0;
+        const processEl = document.getElementById('process');
+
+        function rotateProcess() {
+            processEl.style.opacity = 0;
+            processEl.style.transform = "translateY(5px)";
+            
+            setTimeout(() => {
+                currentIndex = (currentIndex + 1) % steps.length;
+                processEl.textContent = steps[currentIndex];
+                processEl.style.opacity = 0.6;
+                processEl.style.transform = "translateY(0)";
+            }, 800);
+        }
+
+        setTimeout(() => {
+            processEl.style.opacity = 0.6;
+            processEl.style.transform = "translateY(0)";
+            setInterval(rotateProcess, 3500);
+        }, 7000);
+    </script>
+
+</body>
+</html>
