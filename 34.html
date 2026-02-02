@@ -3,105 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>3APTURE | Specialist UX</title>
+    <title>3apture – Capture the Unseen</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         :root {
             --accent: #00eaff;
-            --bg: #050505;
-            --text: #e0e0e0;
-            --text-muted: #9aa;
+            --accent-glow: rgba(0, 234, 255, 0.28);
+            --accent-dim: rgba(0, 234, 255, 0.10);
         }
 
         body {
-            background: var(--bg);
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            color: var(--text);
-            -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
-        }
-
-        /* --- NAVIGATION --- */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 40px 60px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 100;
-            opacity: 0;
-            animation: fade-in 1s ease-out 4s forwards;
+            height: 100dvh;
+            background: #0a0a0a;
+            font-family: 'Helvetica', Arial, sans-serif;
+            overflow: hidden;
+            color: #f0f0f0;
+            position: relative;
         }
 
         .logo {
-            font-size: 20px;
+            position: absolute;
+            top: 5vh;
+            left: 5vw;
+            font-size: clamp(1.6rem, 5vw, 2.2rem);
             font-weight: 900;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: #fff;
-            z-index: 110;
-        }
-        
-        .logo span { color: var(--accent); }
-
-        /* Navigation Links Desktop */
-        .nav-links {
-            display: flex;
-            gap: 40px;
-        }
-
-        .nav-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 15px;
-            font-weight: 600;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover { color: var(--accent); }
-
-        /* --- MOBILE HAMBURGER MENU --- */
-        .menu-checkbox { display: none; }
-
-        .hamburger {
-            display: none;
-            cursor: pointer;
-            z-index: 110;
+            letter-spacing: -0.05em;
             color: var(--accent);
-            font-size: 14px;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            font-weight: 700;
-        }
-
-        /* --- THE PORTAL --- */
-        .scene {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            perspective: 1200px;
-            z-index: 1;
+            mix-blend-mode: difference;
+            z-index: 15;
             pointer-events: none;
         }
 
+        .scene {
+            width: min(90vmin, 100vw);
+            aspect-ratio: 1 / 1;
+            perspective: 1000px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+        }
+
         .rectangle {
-            width: min(70vmin, 650px);
-            aspect-ratio: 16/9;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            background: radial-gradient(circle at center, rgba(20,20,20,0) 0%, rgba(5,5,5,1) 85%);
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, #1e1e1e 0%, #111 70%, #0a0a0a 100%);
+            border: 1px solid rgba(80,80,80,0.4);
+            box-shadow: inset 0 0 80px rgba(0,0,0,0.95);
+            position: absolute;
+            inset: 0;
             transform-style: preserve-3d;
-            animation: tunnel-dive 5.5s cubic-bezier(0.7, 0, 0.3, 1) forwards;
+            /* Animation: Starts opaque at back, fades immediately as it moves forward */
+            animation: frame-reveal 7s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+        }
+
+        @keyframes frame-reveal {
+            0%    { opacity: 1; transform: translateZ(-700px) scale(0.75); border-color: var(--accent); box-shadow: inset 0 0 80px rgba(0,0,0,0.95), 0 0 60px var(--accent-glow); }
+            100%  { opacity: 0; transform: translateZ(100px) scale(1.1); border-color: transparent; box-shadow: none; }
         }
 
         .portal-text {
@@ -109,191 +73,128 @@
             inset: 0;
             display: grid;
             place-items: center;
-            font-size: 14vmin;
-            font-weight: 900;
             color: #fff;
-            mix-blend-mode: overlay;
-            animation: text-sink 5.5s cubic-bezier(0.7, 0, 0.3, 1) forwards;
+            font-size: clamp(24vmin, 40vmin, 55vmin);
+            font-weight: 900;
+            letter-spacing: -0.07em;
+            mix-blend-mode: difference;
+            pointer-events: none;
+            transform-style: preserve-3d;
+            text-shadow: 0 0 50px var(--accent-glow);
+            /* Animation: Transparency starts at 0% and reaches 0 opacity at 100% */
+            animation: sink-and-fade 7s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
         }
 
-        /* --- CONTENT LAYER --- */
-        .content-container {
-            position: relative;
-            z-index: 10;
-            width: 100%;
+        @keyframes sink-and-fade {
+            0%    { opacity: 1; transform: translateZ(-1100px) scale(0.55); filter: blur(0); }
+            100%  { opacity: 0; transform: translateZ(120px) scale(1.06); filter: blur(10px); }
+        }
+
+        .site-content {
+            position: absolute;
+            inset: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding-top: 160px;
-            padding-bottom: 100px;
-        }
-
-        .content-layer {
+            justify-content: center;
             text-align: center;
-            max-width: 1000px;
-            padding: 0 40px;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: surface-content 1.5s ease-out 3.8s forwards;
+            z-index: 1;
+            pointer-events: none;
         }
 
-        h1 {
-            font-size: clamp(2.2rem, 5vw, 3.8rem); 
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            line-height: 1.1;
-            margin-bottom: 2rem;
+        .title-wrapper {
+            position: relative;
+            width: 100%;
+            animation: descend-title 7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            opacity: 0;
+        }
+
+        @keyframes descend-title {
+            0%   { opacity: 0; transform: translateY(-40vh); }
+            30%  { opacity: 0; transform: translateY(-40vh); }
+            70%  { opacity: 1; transform: translateY(0); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .main-title {
+            font-size: clamp(3.8rem, 14vw, 9rem);
+            font-weight: 900;
+            letter-spacing: -0.06em;
+            line-height: 0.92;
             color: #fff;
         }
 
-        h1 span { color: var(--accent); }
+        .subtitle-wrapper {
+            position: relative;
+            width: 100%;
+            animation: ascend-subtitle 7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            opacity: 0;
+        }
+
+        @keyframes ascend-subtitle {
+            0%   { opacity: 0; transform: translateY(40vh); }
+            40%  { opacity: 0; transform: translateY(40vh); }
+            75%  { opacity: 1; transform: translateY(0); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
 
         .subtitle {
-            font-size: clamp(1.1rem, 2.2vw, 1.3rem);
-            line-height: 1.6;
-            color: var(--text-muted);
-            margin-bottom: 3.5rem;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
+            font-size: clamp(1.5rem, 6vw, 2.6rem);
+            font-weight: 300;
+            letter-spacing: 0.12em;
+            opacity: 0.88;
+            margin: 4vh 0 10vh;
         }
 
-        .cta-btn {
-            display: inline-block;
-            padding: 18px 40px;
-            border: 1px solid var(--accent);
+        .cta {
+            font-size: clamp(1.3rem, 5vw, 1.6rem);
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
             color: var(--accent);
             text-decoration: none;
-            font-size: 15px;
-            font-weight: 700;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            margin-bottom: 8rem;
-            transition: 0.3s;
+            transition: all 0.6s ease;
+            pointer-events: auto;
+            opacity: 0;
+            animation: fade-cta 7s forwards;
         }
 
-        .cta-btn:hover { background: var(--accent); color: #000; }
-
-        .features {
-            display: flex;
-            justify-content: center;
-            gap: 60px;
-            flex-wrap: wrap;
+        @keyframes fade-cta {
+            0%    { opacity: 0; }
+            65%   { opacity: 0; }
+            100%  { opacity: 0.9; }
         }
 
-        .feature-item {
-            flex: 1;
-            min-width: 260px;
-            max-width: 310px;
+        .cta:hover,
+        .cta:focus {
+            opacity: 0.7;
+            letter-spacing: 0.6em;
         }
 
-        .feature-item h3 {
-            font-size: 24px;
-            font-weight: 700;
-            color: #fff;
-            margin-bottom: 12px;
-        }
-
-        .feature-item p {
-            font-size: 17px;
-            line-height: 1.6;
-            color: #888;
-        }
-
-        /* --- ANIMATIONS --- */
-        @keyframes tunnel-dive {
-            0%   { opacity: 0; transform: scale(0.8) translateZ(0); }
-            20%  { opacity: 1; transform: scale(1) translateZ(100px); }
-            100% { opacity: 0; transform: scale(3.5) translateZ(1000px); }
-        }
-        @keyframes text-sink {
-            0%   { opacity: 0; transform: translateZ(0); filter: blur(10px); }
-            20%  { opacity: 1; transform: translateZ(0); filter: blur(0); }
-            100% { opacity: 0; transform: translateZ(-1100px); filter: blur(20px); }
-        }
-        @keyframes surface-content { to { opacity: 1; transform: translateY(0); } }
-        @keyframes fade-in { to { opacity: 1; } }
-
-        /* --- MOBILE MEDIA QUERIES --- */
         @media (max-width: 768px) {
-            nav { padding: 30px; }
-            h1 { font-size: 2.2rem; }
-            .content-container { padding-top: 120px; }
-
-            /* Show Hamburger Toggle */
-            .hamburger { display: block; }
-
-            /* Hide desktop links and transform into mobile overlay */
-            .nav-links {
-                position: fixed;
-                inset: 0;
-                background: var(--bg);
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                gap: 30px;
-                transform: translateX(100%);
-                transition: transform 0.4s cubic-bezier(0.7, 0, 0.3, 1);
-                z-index: 105;
-            }
-
-            .nav-links a { font-size: 24px; }
-
-            /* Logic to show menu when checkbox is checked */
-            .menu-checkbox:checked ~ .nav-links {
-                transform: translateX(0);
-            }
-
-            /* Update Hamburger text when open */
-            .menu-checkbox:checked ~ .hamburger::before {
-                content: 'CLOSE ';
-            }
+            .subtitle { margin: 3vh 0 12vh; }
+            .main-title { line-height: 0.88; }
         }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="logo">3APTURE<span>.</span></div>
-        
-        <input type="checkbox" id="menu-toggle" class="menu-checkbox">
-        <label for="menu-toggle" class="hamburger">MENU</label>
-
-        <div class="nav-links">
-            <a href="#">Technology</a>
-            <a href="#">Solutions</a>
-            <a href="#">Pricing</a>
-            <a href="#">Contact</a>
-        </div>
-    </nav>
+    <div class="logo">3apture</div>
 
     <div class="scene">
-        <div class="rectangle">
-            <div class="portal-text">360</div>
-        </div>
+        <div class="rectangle"></div>
+        <div class="portal-text">360</div>
     </div>
 
-    <div class="content-container">
-        <div class="content-layer">
-            <h1>Capture Spaces in <span>3D/360</span> <br>for Virtual Viewing</h1>
-            <p class="subtitle">Transform physical spaces into immersive virtual experiences with our cutting-edge capture technology.</p>
-            <a href="#" class="cta-btn">Start Capturing Today</a>
-
-            <div class="features">
-                <div class="feature-item">
-                    <h3>360° Capture</h3>
-                    <p>Capture every angle of your space with high-resolution imaging technology.</p>
-                </div>
-                <div class="feature-item">
-                    <h3>3D Modeling</h3>
-                    <p>Convert captured data into detailed 3D models for immersive tours.</p>
-                </div>
-                <div class="feature-item">
-                    <h3>Virtual Viewing</h3>
-                    <p>Share and explore captured spaces from any device.</p>
-                </div>
-            </div>
+    <div class="site-content">
+        <div class="title-wrapper">
+            <h1 class="main-title">Capture the Unseen</h1>
         </div>
+
+        <div class="subtitle-wrapper">
+            <p class="subtitle">Immerse • Reveal • Anywhere</p>
+        </div>
+
+        <a href="#" class="cta">Enter the space →</a>
     </div>
 
 </body>
