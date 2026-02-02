@@ -39,7 +39,7 @@
             border: 2px solid rgba(255, 255, 255, 0.3);
             position: relative;
             transform-style: preserve-3d;
-            animation: frame-approach 3.5s ease-out forwards;
+            animation: frame-approach 3.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         .portal-text {
@@ -50,7 +50,7 @@
             font-size: 18vmin;
             font-weight: 900;
             color: #fff;
-            animation: text-approach 3.5s ease-out forwards;
+            animation: text-approach 3.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         .portal-inner {
@@ -73,7 +73,7 @@
             opacity: 0;
             transform: scale(0.5) translateZ(-500px);
             transform-style: preserve-3d;
-            animation: emerge-from-portal 1.5s ease-out 2.5s forwards;
+            animation: emerge-from-portal 1.5s cubic-bezier(0.16, 1, 0.3, 1) 2.5s forwards;
         }
 
         .content-wrapper {
@@ -227,20 +227,19 @@
 
         /* --- ANIMATIONS --- */
         @keyframes frame-approach {
-            0%   { opacity: 0; transform: scale(0.1) translateZ(-2000px); }
-            15%  { opacity: 1; }
+            0%   { opacity: 0; transform: scale(0.2) translateZ(-1500px); }
+            30%  { opacity: 1; transform: scale(0.6) translateZ(-600px); }
             100% { opacity: 1; transform: scale(1) translateZ(0); }
         }
 
         @keyframes text-approach {
-            0%   { opacity: 0; filter: blur(40px); transform: scale(0.5); }
-            20%  { opacity: 1; }
-            100% { opacity: 1; filter: blur(0); transform: scale(1); }
+            0%   { opacity: 0; filter: blur(30px); }
+            30%  { opacity: 1; filter: blur(8px); }
+            100% { opacity: 1; filter: blur(0); }
         }
 
         @keyframes inner-glow {
-            0%   { opacity: 1; }
-            70%  { opacity: 1; }
+            0%, 60% { opacity: 1; }
             100% { opacity: 0; }
         }
 
@@ -253,13 +252,14 @@
         }
 
         @keyframes emerge-from-portal {
-            0%   { opacity: 0; transform: scale(0.5) translateZ(-500px); }
-            100% { opacity: 1; transform: scale(1) translateZ(0); }
+            to { 
+                opacity: 1; 
+                transform: scale(1) translateZ(0); 
+            }
         }
 
         @keyframes fade-in {
-            0%   { opacity: 0; }
-            100% { opacity: 1; }
+            to { opacity: 1; }
         }
 
         @media (max-width: 768px) {
