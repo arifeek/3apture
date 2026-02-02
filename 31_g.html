@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>3APTURE | Minimalist</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --accent: #00eaff;
+            --accent-glow: rgba(0, 234, 255, 0.3);
+            --bg: #050505;
+            --text: #e0e0e0;
+        }
+
+        body {
+            height: 100dvh;
+            background: var(--bg);
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            overflow: hidden;
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- THE LOGO --- */
+        .logo {
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent);
+            z-index: 10;
+            mix-blend-mode: difference;
+        }
+
+        /* --- THE PORTAL (Animation) --- */
+        .scene {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 1200px;
+            z-index: 2;
+            pointer-events: none; /* Let clicks pass through to content */
+        }
+
+        .rectangle {
+            width: min(70vmin, 600px);
+            aspect-ratio: 16/9;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: radial-gradient(circle at center, rgba(20,20,20,0) 0%, rgba(5,5,5,1) 80%);
+            box-shadow: 0 0 40px rgba(0, 234, 255, 0.05);
+            transform-style: preserve-3d;
+            animation: tunnel-dive 6s cubic-bezier(0.7, 0, 0.3, 1) forwards;
+        }
+
+        .portal-text {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            font-size: 15vmin;
+            font-weight: 900;
+            letter-spacing: -0.06em;
+            color: #fff;
+            mix-blend-mode: overlay;
+            animation: text-sink 6s cubic-bezier(0.7, 0, 0.3, 1) forwards;
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes tunnel-dive {
+            0%   { opacity: 0; transform: scale(0.9) translateZ(0); border-color: rgba(255,255,255,0.1); }
+            20%  { opacity: 1; transform: scale(1) translateZ(50px); border-color: var(--accent); }
+            100% { opacity: 0; transform: scale(3) translateZ(800px); border-color: transparent; }
+        }
+
+        @keyframes text-sink {
+            0%   { opacity: 0; transform: translateZ(0) scale(0.9); filter: blur(10px); }
+            20%  { opacity: 1; transform: translateZ(0) scale(1); filter: blur(0); }
+            60%  { opacity: 0.8; }
+            100% { opacity: 0; transform: translateZ(-1000px) scale(0.5); filter: blur(20px); }
+        }
+
+        /* --- THE LANDING CONTENT --- */
+        .content {
+            z-index: 1;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: surface-content 2s ease-out 3.5s forwards; /* Delays until portal passes */
+        }
+
+        @keyframes surface-content {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 500;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+        h1 span {
+            display: block;
+            font-weight: 300;
+            font-size: 0.5em;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .desc {
+            max-width: 400px;
+            margin: 0 auto 3rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #888;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.8rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            border-color: var(--accent);
+            background: rgba(0, 234, 255, 0.05);
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        /* --- MOBILE TWEAKS --- */
+        @media (max-width: 768px) {
+            .logo { top: 30px; left: 30px; }
+            .rectangle { width: 85vw; }
+            h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="logo">3apture.au</div>
+
+    <div class="scene">
+        <div class="rectangle">
+            <div class="portal-text">360</div>
+        </div>
+    </div>
+
+    <div class="content">
+        <h1>
+            <span>Virtual Reality</span>
+            Capture the Unseen
+        </h1>
+        
+        <p class="desc">
+            Ultra-high definition spatial documentation. <br>
+            Experience the flow of light and scale from anywhere.
+        </p>
+
+        <a href="#" class="btn">Enter Space</a>
+    </div>
+
+</body>
+</html>
