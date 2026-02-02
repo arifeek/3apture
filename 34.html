@@ -22,7 +22,7 @@
             overflow-x: hidden;
         }
 
-        /* --- NAVIGATION: Pinned at top --- */
+        /* --- NAVIGATION --- */
         nav {
             position: fixed;
             top: 0;
@@ -42,10 +42,12 @@
             letter-spacing: 0.1em;
             text-transform: uppercase;
             color: #fff;
+            z-index: 110;
         }
         
         .logo span { color: var(--accent); }
 
+        /* Navigation Links Desktop */
         .nav-links {
             display: flex;
             gap: 40px;
@@ -58,9 +60,26 @@
             font-weight: 600;
             letter-spacing: 0.1em;
             text-transform: uppercase;
+            transition: color 0.3s;
         }
 
-        /* --- THE PORTAL: Fixed and Centered (Always Visible) --- */
+        .nav-links a:hover { color: var(--accent); }
+
+        /* --- MOBILE HAMBURGER MENU --- */
+        .menu-checkbox { display: none; }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            z-index: 110;
+            color: var(--accent);
+            font-size: 14px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        /* --- THE PORTAL --- */
         .scene {
             position: fixed;
             top: 50%;
@@ -72,7 +91,7 @@
             align-items: center;
             justify-content: center;
             perspective: 1200px;
-            z-index: 1; /* Sits behind the content */
+            z-index: 1;
             pointer-events: none;
         }
 
@@ -97,7 +116,7 @@
             animation: text-sink 5.5s cubic-bezier(0.7, 0, 0.3, 1) forwards;
         }
 
-        /* --- CONTENT LAYER: Layered over the Portal --- */
+        /* --- CONTENT LAYER --- */
         .content-container {
             position: relative;
             z-index: 10;
@@ -105,7 +124,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding-top: 160px; /* Ensures initial text starts below Nav */
+            padding-top: 160px;
             padding-bottom: 100px;
         }
 
@@ -150,7 +169,10 @@
             letter-spacing: 0.15em;
             text-transform: uppercase;
             margin-bottom: 8rem;
+            transition: 0.3s;
         }
+
+        .cta-btn:hover { background: var(--accent); color: #000; }
 
         .features {
             display: flex;
@@ -184,21 +206,48 @@
             20%  { opacity: 1; transform: scale(1) translateZ(100px); }
             100% { opacity: 0; transform: scale(3.5) translateZ(1000px); }
         }
-
         @keyframes text-sink {
             0%   { opacity: 0; transform: translateZ(0); filter: blur(10px); }
             20%  { opacity: 1; transform: translateZ(0); filter: blur(0); }
             100% { opacity: 0; transform: translateZ(-1100px); filter: blur(20px); }
         }
-
         @keyframes surface-content { to { opacity: 1; transform: translateY(0); } }
         @keyframes fade-in { to { opacity: 1; } }
 
+        /* --- MOBILE MEDIA QUERIES --- */
         @media (max-width: 768px) {
             nav { padding: 30px; }
-            .nav-links { display: none; }
-            .content-container { padding-top: 120px; }
             h1 { font-size: 2.2rem; }
+            .content-container { padding-top: 120px; }
+
+            /* Show Hamburger Toggle */
+            .hamburger { display: block; }
+
+            /* Hide desktop links and transform into mobile overlay */
+            .nav-links {
+                position: fixed;
+                inset: 0;
+                background: var(--bg);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 30px;
+                transform: translateX(100%);
+                transition: transform 0.4s cubic-bezier(0.7, 0, 0.3, 1);
+                z-index: 105;
+            }
+
+            .nav-links a { font-size: 24px; }
+
+            /* Logic to show menu when checkbox is checked */
+            .menu-checkbox:checked ~ .nav-links {
+                transform: translateX(0);
+            }
+
+            /* Update Hamburger text when open */
+            .menu-checkbox:checked ~ .hamburger::before {
+                content: 'CLOSE ';
+            }
         }
     </style>
 </head>
@@ -206,6 +255,10 @@
 
     <nav>
         <div class="logo">3APTURE<span>.</span></div>
+        
+        <input type="checkbox" id="menu-toggle" class="menu-checkbox">
+        <label for="menu-toggle" class="hamburger">MENU</label>
+
         <div class="nav-links">
             <a href="#">Technology</a>
             <a href="#">Solutions</a>
