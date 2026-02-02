@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>3APTURE | 3D Space Capture</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --accent: #00eaff; /* Kept the neon cyan for high-end feel vs standard blue */
+            --bg: #050505;
+            --text: #e0e0e0;
+            --text-muted: #888;
+        }
+
+        body {
+            height: 100dvh;
+            background: var(--bg);
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            overflow: hidden;
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- NAVIGATION (From 8.html) --- */
+        nav {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+            opacity: 0;
+            animation: surface-nav 2s ease-out 4s forwards; /* Delays until portal finishes */
+        }
+
+        .logo {
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #fff;
+        }
+        
+        .logo span { color: var(--accent); }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 11px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+
+        /* --- THE PORTAL (Animation Layer) --- */
+        .scene {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 1200px;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .rectangle {
+            width: min(70vmin, 600px);
+            aspect-ratio: 16/9;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: radial-gradient(circle at center, rgba(20,20,20,0) 0%, rgba(5,5,5,1) 80%);
+            box-shadow: 0 0 40px rgba(0, 234, 255, 0.05);
+            transform-style: preserve-3d;
+            animation: tunnel-dive 5s cubic-bezier(0.7, 0, 0.3, 1) forwards;
+        }
+
+        .portal-text {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            font-size: 15vmin;
+            font-weight: 900;
+            letter-spacing: -0.06em;
+            color: #fff;
+            mix-blend-mode: overlay;
+            animation: text-sink 5s cubic-bezier(0.7, 0, 0.3, 1) forwards;
+        }
+
+        /* --- MAIN CONTENT (From 8.html) --- */
+        .content-layer {
+            z-index: 1;
+            text-align: center;
+            max-width: 800px;
+            padding: 0 20px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: surface-content 1.5s ease-out 3.5s forwards;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 600;
+            letter-spacing: -0.04em;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: #fff;
+        }
+
+        h1 span { color: var(--accent); }
+
+        .subtitle {
+            font-size: clamp(1rem, 2vw, 1.1rem);
+            line-height: 1.6;
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+            font-weight: 300;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            padding: 14px 32px;
+            border: 1px solid var(--accent);
+            background: rgba(0, 234, 255, 0.05);
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 11px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 4rem;
+            transition: all 0.3s ease;
+        }
+
+        .cta-btn:hover {
+            background: var(--accent);
+            color: #000;
+            box-shadow: 0 0 30px var(--accent);
+        }
+
+        /* --- FEATURES GRID (Redesigned) --- */
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .feature-item {
+            flex: 1;
+            min-width: 200px;
+            max-width: 250px;
+            text-align: center;
+        }
+
+        .f-icon {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: var(--accent);
+            opacity: 0.8;
+        }
+
+        .feature-item h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 8px;
+            letter-spacing: 0.05em;
+        }
+
+        .feature-item p {
+            font-size: 12px;
+            line-height: 1.5;
+            color: #666;
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes tunnel-dive {
+            0%   { opacity: 0; transform: scale(0.9) translateZ(0); }
+            20%  { opacity: 1; transform: scale(1) translateZ(50px); border-color: var(--accent); }
+            100% { opacity: 0; transform: scale(3) translateZ(800px); border-color: transparent; }
+        }
+
+        @keyframes text-sink {
+            0%   { opacity: 0; transform: translateZ(0) scale(0.9); filter: blur(10px); }
+            20%  { opacity: 1; transform: translateZ(0) scale(1); filter: blur(0); }
+            60%  { opacity: 0.8; }
+            100% { opacity: 0; transform: translateZ(-1000px) scale(0.5); filter: blur(20px); }
+        }
+
+        @keyframes surface-content {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes surface-nav {
+            to { opacity: 1; }
+        }
+
+        /* --- MOBILE --- */
+        @media (max-width: 768px) {
+            nav { padding: 20px; }
+            .nav-links { display: none; } /* Hide links on mobile for minimalism */
+            .features { gap: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">3apture<span>.</span></div>
+        <div class="nav-links">
+            <a href="#">Technology</a>
+            <a href="#">Solutions</a>
+            <a href="#">Pricing</a>
+            <a href="#">Contact</a>
+        </div>
+    </nav>
+
+    <div class="scene">
+        <div class="rectangle">
+            <div class="portal-text">360</div>
+        </div>
+    </div>
+
+    <div class="content-layer">
+        
+        <h1>Capture Spaces in <span>3D/360</span> <br>for Virtual Viewing</h1>
+        
+        <p class="subtitle">
+            Transform physical spaces into immersive virtual experiences with our cutting-edge capture technology.
+        </p>
+
+        <a href="#" class="cta-btn">Start Capturing Today</a>
+
+        <div class="features">
+            <div class="feature-item">
+                <div class="f-icon">⟳</div>
+                <h3>360° Capture</h3>
+                <p>Capture every angle of your space with high-resolution imaging technology.</p>
+            </div>
+            <div class="feature-item">
+                <div class="f-icon">⬢</div>
+                <h3>3D Modeling</h3>
+                <p>Convert captured data into detailed 3D models for immersive tours.</p>
+            </div>
+            <div class="feature-item">
+                <div class="f-icon">👁️</div>
+                <h3>Virtual Viewing</h3>
+                <p>Share and explore captured spaces from any device.</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
