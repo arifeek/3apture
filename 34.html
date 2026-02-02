@@ -15,30 +15,25 @@
         }
 
         body {
-            height: 100dvh;
             background: var(--bg);
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            overflow-x: hidden;
             color: var(--text);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
             -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
 
-        /* --- NAVIGATION --- */
+        /* --- NAVIGATION: Pinned at top --- */
         nav {
-            position: absolute;
+            position: fixed;
             top: 0;
             width: 100%;
             padding: 40px 60px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            z-index: 10;
+            z-index: 100;
             opacity: 0;
-            animation: surface-nav 2s ease-out 4s forwards;
+            animation: fade-in 1s ease-out 4s forwards;
         }
 
         .logo {
@@ -63,18 +58,21 @@
             font-weight: 600;
             letter-spacing: 0.1em;
             text-transform: uppercase;
-            transition: color 0.3s;
         }
 
-        /* --- THE PORTAL --- */
+        /* --- THE PORTAL: Fixed and Centered (Always Visible) --- */
         .scene {
-            position: absolute;
-            inset: 0;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100vw;
+            height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             perspective: 1200px;
-            z-index: 2;
+            z-index: 1; /* Sits behind the content */
             pointer-events: none;
         }
 
@@ -92,16 +90,26 @@
             inset: 0;
             display: grid;
             place-items: center;
-            font-size: 14vmin; /* Slightly reduced for elegance */
+            font-size: 14vmin;
             font-weight: 900;
             color: #fff;
             mix-blend-mode: overlay;
             animation: text-sink 5.5s cubic-bezier(0.7, 0, 0.3, 1) forwards;
         }
 
-        /* --- MAIN CONTENT RECALIBRATION --- */
+        /* --- CONTENT LAYER: Layered over the Portal --- */
+        .content-container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 160px; /* Ensures initial text starts below Nav */
+            padding-bottom: 100px;
+        }
+
         .content-layer {
-            z-index: 1;
             text-align: center;
             max-width: 1000px;
             padding: 0 40px;
@@ -111,8 +119,7 @@
         }
 
         h1 {
-            /* RECALIBRATED HERO SIZE */
-            font-size: clamp(2.5rem, 5.5vw, 4.2rem); 
+            font-size: clamp(2.2rem, 5vw, 3.8rem); 
             font-weight: 800;
             letter-spacing: -0.03em;
             line-height: 1.1;
@@ -123,14 +130,13 @@
         h1 span { color: var(--accent); }
 
         .subtitle {
-            font-size: clamp(1.1rem, 2.5vw, 1.4rem); /* Kept large for readability */
+            font-size: clamp(1.1rem, 2.2vw, 1.3rem);
             line-height: 1.6;
             color: var(--text-muted);
             margin-bottom: 3.5rem;
             max-width: 700px;
             margin-left: auto;
             margin-right: auto;
-            font-weight: 300;
         }
 
         .cta-btn {
@@ -143,16 +149,9 @@
             font-weight: 700;
             letter-spacing: 0.15em;
             text-transform: uppercase;
-            margin-bottom: 5rem;
-            transition: all 0.3s ease;
+            margin-bottom: 8rem;
         }
 
-        .cta-btn:hover {
-            background: var(--accent);
-            color: #000;
-        }
-
-        /* --- FEATURES (Kept Large) --- */
         .features {
             display: flex;
             justify-content: center;
@@ -167,38 +166,39 @@
         }
 
         .feature-item h3 {
-            font-size: 24px; /* Kept large as requested */
+            font-size: 24px;
             font-weight: 700;
             color: #fff;
             margin-bottom: 12px;
         }
 
         .feature-item p {
-            font-size: 17px; /* Kept readable */
+            font-size: 17px;
             line-height: 1.6;
             color: #888;
         }
 
         /* --- ANIMATIONS --- */
         @keyframes tunnel-dive {
-            0%   { opacity: 0; transform: scale(0.85) translateZ(0); }
-            25%  { opacity: 1; transform: scale(1) translateZ(100px); }
-            100% { opacity: 0; transform: scale(3.2) translateZ(900px); }
+            0%   { opacity: 0; transform: scale(0.8) translateZ(0); }
+            20%  { opacity: 1; transform: scale(1) translateZ(100px); }
+            100% { opacity: 0; transform: scale(3.5) translateZ(1000px); }
         }
 
         @keyframes text-sink {
             0%   { opacity: 0; transform: translateZ(0); filter: blur(10px); }
-            25%  { opacity: 1; transform: translateZ(0); filter: blur(0); }
+            20%  { opacity: 1; transform: translateZ(0); filter: blur(0); }
             100% { opacity: 0; transform: translateZ(-1100px); filter: blur(20px); }
         }
 
         @keyframes surface-content { to { opacity: 1; transform: translateY(0); } }
-        @keyframes surface-nav { to { opacity: 1; } }
+        @keyframes fade-in { to { opacity: 1; } }
 
         @media (max-width: 768px) {
-            h1 { font-size: 2.4rem; }
-            .features { gap: 40px; }
             nav { padding: 30px; }
+            .nav-links { display: none; }
+            .content-container { padding-top: 120px; }
+            h1 { font-size: 2.2rem; }
         }
     </style>
 </head>
@@ -220,23 +220,25 @@
         </div>
     </div>
 
-    <div class="content-layer">
-        <h1>Capture Spaces in <span>3D/360</span> <br>for Virtual Viewing</h1>
-        <p class="subtitle">Transform physical spaces into immersive virtual experiences with our cutting-edge capture technology.</p>
-        <a href="#" class="cta-btn">Start Capturing Today</a>
+    <div class="content-container">
+        <div class="content-layer">
+            <h1>Capture Spaces in <span>3D/360</span> <br>for Virtual Viewing</h1>
+            <p class="subtitle">Transform physical spaces into immersive virtual experiences with our cutting-edge capture technology.</p>
+            <a href="#" class="cta-btn">Start Capturing Today</a>
 
-        <div class="features">
-            <div class="feature-item">
-                <h3>360° Capture</h3>
-                <p>Capture every angle of your space with high-resolution imaging technology.</p>
-            </div>
-            <div class="feature-item">
-                <h3>3D Modeling</h3>
-                <p>Convert captured data into detailed 3D models for immersive tours.</p>
-            </div>
-            <div class="feature-item">
-                <h3>Virtual Viewing</h3>
-                <p>Share and explore captured spaces from any device.</p>
+            <div class="features">
+                <div class="feature-item">
+                    <h3>360° Capture</h3>
+                    <p>Capture every angle of your space with high-resolution imaging technology.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>3D Modeling</h3>
+                    <p>Convert captured data into detailed 3D models for immersive tours.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Virtual Viewing</h3>
+                    <p>Share and explore captured spaces from any device.</p>
+                </div>
             </div>
         </div>
     </div>
