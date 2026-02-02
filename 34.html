@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>3APTURE | Fixed Immersive</title>
+    <title>3APTURE | Specialist UX</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -15,69 +15,74 @@
         }
 
         body {
-            height: 100dvh;
             background: var(--bg);
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             color: var(--text);
-            overflow: hidden; /* No scroll needed */
-            display: grid;
-            place-items: center;
             -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
 
-        /* --- LAYER 3: NAVIGATION --- */
+        /* --- NAVIGATION: Pinned at top --- */
         nav {
-            position: absolute;
+            position: fixed;
             top: 0;
             width: 100%;
-            padding: 30px 40px;
+            padding: 40px 60px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            z-index: 30;
+            z-index: 100;
+            opacity: 0;
+            animation: fade-in 1s ease-out 4s forwards;
         }
 
         .logo {
-            font-size: 1.2rem;
+            font-size: 20px;
             font-weight: 900;
             letter-spacing: 0.1em;
             text-transform: uppercase;
             color: #fff;
         }
+        
         .logo span { color: var(--accent); }
 
         .nav-links {
             display: flex;
-            gap: 25px;
+            gap: 40px;
         }
 
         .nav-links a {
             color: var(--text-muted);
             text-decoration: none;
-            font-size: 13px;
+            font-size: 15px;
             font-weight: 600;
             letter-spacing: 0.1em;
             text-transform: uppercase;
         }
 
-        /* --- LAYER 1: THE 3D PORTAL (BACKGROUND) --- */
-        .portal-layer {
-            position: absolute;
-            inset: 0;
+        /* --- THE PORTAL: Fixed and Centered (Always Visible) --- */
+        .scene {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100vw;
+            height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 1;
-            perspective: 1000px;
+            perspective: 1200px;
+            z-index: 1; /* Sits behind the content */
             pointer-events: none;
         }
 
         .rectangle {
-            width: min(70vmin, 600px);
+            width: min(70vmin, 650px);
             aspect-ratio: 16/9;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: radial-gradient(circle, transparent 0%, var(--bg) 80%);
-            animation: portal-dive 8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: radial-gradient(circle at center, rgba(20,20,20,0) 0%, rgba(5,5,5,1) 85%);
+            transform-style: preserve-3d;
+            animation: tunnel-dive 5.5s cubic-bezier(0.7, 0, 0.3, 1) forwards;
         }
 
         .portal-text {
@@ -85,71 +90,115 @@
             inset: 0;
             display: grid;
             place-items: center;
-            font-size: 12vmin;
+            font-size: 14vmin;
             font-weight: 900;
             color: #fff;
-            opacity: 0.2;
+            mix-blend-mode: overlay;
+            animation: text-sink 5.5s cubic-bezier(0.7, 0, 0.3, 1) forwards;
         }
 
-        /* --- LAYER 2: THE CONTENT (FOREGROUND) --- */
-        .content-layer {
+        /* --- CONTENT LAYER: Layered over the Portal --- */
+        .content-container {
             position: relative;
-            z-index: 20;
+            z-index: 10;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 160px; /* Ensures initial text starts below Nav */
+            padding-bottom: 100px;
+        }
+
+        .content-layer {
             text-align: center;
-            max-width: 900px;
-            padding: 20px;
-            pointer-events: auto;
+            max-width: 1000px;
+            padding: 0 40px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: surface-content 1.5s ease-out 3.8s forwards;
         }
 
         h1 {
-            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-size: clamp(2.2rem, 5vw, 3.8rem); 
             font-weight: 800;
+            letter-spacing: -0.03em;
             line-height: 1.1;
-            margin-bottom: 1.5rem;
-            letter-spacing: -0.02em;
+            margin-bottom: 2rem;
+            color: #fff;
         }
 
+        h1 span { color: var(--accent); }
+
         .subtitle {
-            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            font-size: clamp(1.1rem, 2.2vw, 1.3rem);
+            line-height: 1.6;
             color: var(--text-muted);
-            margin-bottom: 3rem;
-            max-width: 600px;
-            margin-inline: auto;
+            margin-bottom: 3.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            padding: 18px 40px;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 8rem;
         }
 
         .features {
             display: flex;
             justify-content: center;
-            gap: 40px;
-            margin-top: 40px;
+            gap: 60px;
+            flex-wrap: wrap;
+        }
+
+        .feature-item {
+            flex: 1;
+            min-width: 260px;
+            max-width: 310px;
         }
 
         .feature-item h3 {
-            font-size: 1.1rem;
+            font-size: 24px;
+            font-weight: 700;
             color: #fff;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
         }
 
         .feature-item p {
-            font-size: 0.9rem;
-            color: #777;
-            line-height: 1.4;
+            font-size: 17px;
+            line-height: 1.6;
+            color: #888;
         }
 
         /* --- ANIMATIONS --- */
-        @keyframes portal-dive {
-            0% { transform: scale(0.8) translateZ(-200px); opacity: 0; }
-            50% { opacity: 0.8; }
-            100% { transform: scale(3) translateZ(500px); opacity: 0; }
+        @keyframes tunnel-dive {
+            0%   { opacity: 0; transform: scale(0.8) translateZ(0); }
+            20%  { opacity: 1; transform: scale(1) translateZ(100px); }
+            100% { opacity: 0; transform: scale(3.5) translateZ(1000px); }
         }
 
-        /* --- MOBILE --- */
+        @keyframes text-sink {
+            0%   { opacity: 0; transform: translateZ(0); filter: blur(10px); }
+            20%  { opacity: 1; transform: translateZ(0); filter: blur(0); }
+            100% { opacity: 0; transform: translateZ(-1100px); filter: blur(20px); }
+        }
+
+        @keyframes surface-content { to { opacity: 1; transform: translateY(0); } }
+        @keyframes fade-in { to { opacity: 1; } }
+
         @media (max-width: 768px) {
-            .nav-links { gap: 15px; }
-            .nav-links a { font-size: 10px; }
-            .features { flex-direction: column; gap: 20px; }
+            nav { padding: 30px; }
+            .nav-links { display: none; }
+            .content-container { padding-top: 120px; }
             h1 { font-size: 2.2rem; }
-            .portal-text { font-size: 20vmin; }
         }
     </style>
 </head>
@@ -158,34 +207,38 @@
     <nav>
         <div class="logo">3APTURE<span>.</span></div>
         <div class="nav-links">
-            <a href="#">Tech</a>
+            <a href="#">Technology</a>
             <a href="#">Solutions</a>
+            <a href="#">Pricing</a>
             <a href="#">Contact</a>
         </div>
     </nav>
 
-    <div class="portal-layer">
+    <div class="scene">
         <div class="rectangle">
             <div class="portal-text">360</div>
         </div>
     </div>
 
-    <div class="content-layer">
-        <h1>Capture Spaces in <span>3D/360</span></h1>
-        <p class="subtitle">Transform physical spaces into immersive virtual experiences with our cutting-edge technology.</p>
-        
-        <div class="features">
-            <div class="feature-item">
-                <h3>360° Capture</h3>
-                <p>High-resolution imaging.</p>
-            </div>
-            <div class="feature-item">
-                <h3>3D Modeling</h3>
-                <p>Immersive spatial tours.</p>
-            </div>
-            <div class="feature-item">
-                <h3>Virtual Viewing</h3>
-                <p>Explore from any device.</p>
+    <div class="content-container">
+        <div class="content-layer">
+            <h1>Capture Spaces in <span>3D/360</span> <br>for Virtual Viewing</h1>
+            <p class="subtitle">Transform physical spaces into immersive virtual experiences with our cutting-edge capture technology.</p>
+            <a href="#" class="cta-btn">Start Capturing Today</a>
+
+            <div class="features">
+                <div class="feature-item">
+                    <h3>360° Capture</h3>
+                    <p>Capture every angle of your space with high-resolution imaging technology.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>3D Modeling</h3>
+                    <p>Convert captured data into detailed 3D models for immersive tours.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Virtual Viewing</h3>
+                    <p>Share and explore captured spaces from any device.</p>
+                </div>
             </div>
         </div>
     </div>
