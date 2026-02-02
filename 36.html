@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>3APTURE | Smooth Motion</title>
+    <title>3APTURE | Portal</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -11,7 +11,6 @@
             --accent: #00eaff;
             --bg: #050505;
             --text: #e0e0e0;
-            --text-muted: #9aa;
         }
 
         body {
@@ -22,29 +21,153 @@
             overflow-x: hidden;
         }
 
-        /* --- NAVIGATION --- */
+        /* --- THE PORTAL --- */
+        .portal-container {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 2000px;
+            z-index: 100;
+            animation: portal-exit 1s ease-out 3s forwards;
+        }
+
+        .portal-frame {
+            width: min(70vmin, 650px);
+            aspect-ratio: 16/9;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            transform-style: preserve-3d;
+            animation: frame-approach 3.5s ease-out forwards;
+        }
+
+        .portal-text {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            font-size: 18vmin;
+            font-weight: 900;
+            color: #fff;
+            animation: text-approach 3.5s ease-out forwards;
+        }
+
+        .portal-inner {
+            position: absolute;
+            inset: 10px;
+            background: radial-gradient(circle, rgba(0, 234, 255, 0.1) 0%, rgba(5, 5, 5, 1) 70%);
+            animation: inner-glow 3.5s ease forwards;
+        }
+
+        /* --- CONTENT EMERGES FROM PORTAL --- */
+        .main-content {
+            position: relative;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 160px;
+            padding-bottom: 100px;
+            z-index: 10;
+            opacity: 0;
+            transform: scale(0.5) translateZ(-500px);
+            transform-style: preserve-3d;
+            animation: emerge-from-portal 1.5s ease-out 2.5s forwards;
+        }
+
+        .content-wrapper {
+            text-align: center;
+            max-width: 900px;
+            padding: 0 40px;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: #fff;
+        }
+
+        h1 span { color: var(--accent); }
+
+        .subtitle {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            line-height: 1.6;
+            color: #9aa;
+            margin-bottom: 3rem;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            padding: 18px 50px;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+
+        .cta-btn:hover {
+            background: var(--accent);
+            color: var(--bg);
+            box-shadow: 0 0 40px rgba(0, 234, 255, 0.6);
+        }
+
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            flex-wrap: wrap;
+            margin-top: 6rem;
+        }
+
+        .feature-item {
+            flex: 1;
+            min-width: 260px;
+            max-width: 310px;
+        }
+
+        .feature-item h3 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+
+        .feature-item p {
+            font-size: 17px;
+            line-height: 1.6;
+            color: #888;
+        }
+
+        /* --- NAV --- */
         nav {
             position: fixed;
-            top: 0;
+            top: 40px;
             width: 100%;
-            padding: 40px 60px;
+            padding: 0 60px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            z-index: 100;
+            z-index: 50;
             opacity: 0;
-            animation: fade-in 1s ease-out 5s forwards;
+            animation: fade-in 1s ease-out 3.5s forwards;
         }
 
         .logo {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 900;
             letter-spacing: 0.1em;
             text-transform: uppercase;
             color: #fff;
-            z-index: 110;
         }
-        
+
         .logo span { color: var(--accent); }
 
         .nav-links {
@@ -53,20 +176,24 @@
         }
 
         .nav-links a {
-            color: var(--text-muted);
+            color: #9aa;
             text-decoration: none;
             font-size: 15px;
             font-weight: 600;
             letter-spacing: 0.1em;
             text-transform: uppercase;
+            transition: color 0.3s;
         }
 
-        /* Mobile Hamburger Logic */
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        /* Mobile Hamburger */
         .menu-checkbox { display: none; }
         .hamburger {
             display: none;
             cursor: pointer;
-            z-index: 110;
             color: var(--accent);
             font-size: 14px;
             letter-spacing: 0.2em;
@@ -74,121 +201,69 @@
             font-weight: 700;
         }
 
-        /* --- THE PORTAL (SMOOTHED TIMING) --- */
-        .scene {
+        .hamburger::after {
+            content: 'MENU';
+        }
+
+        .menu-checkbox:checked ~ .hamburger::after {
+            content: 'CLOSE';
+        }
+
+        .hamburger {
+            z-index: 110;
+        }
+
+        .corner-text {
             position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            perspective: 1200px;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        .rectangle {
-            width: min(70vmin, 650px);
-            aspect-ratio: 16/9;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            background: radial-gradient(circle at center, rgba(20,20,20,0) 0%, rgba(5,5,5,1) 85%);
-            transform-style: preserve-3d;
-            /* Extended to 7s for cinematic feel */
-            animation: back-to-front-smooth 7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
-
-        .portal-text {
-            position: absolute;
-            inset: 0;
-            display: grid;
-            place-items: center;
-            font-size: 14vmin;
-            font-weight: 900;
-            color: #fff;
-            mix-blend-mode: overlay;
-            animation: text-back-to-front-smooth 7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
-
-        /* --- CONTENT LAYER --- */
-        .content-container {
-            position: relative;
-            z-index: 10;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 160px;
-            padding-bottom: 100px;
-        }
-
-        .content-layer {
-            text-align: center;
-            max-width: 1000px;
-            padding: 0 40px;
+            bottom: 40px;
+            right: 60px;
+            font-size: 11px;
+            letter-spacing: 0.3em;
+            color: #666;
+            z-index: 50;
             opacity: 0;
-            transform: translateY(30px);
-            animation: surface-content 1.5s ease-out 5.5s forwards;
+            animation: fade-in 1s ease-out 3.5s forwards;
         }
 
-        h1 {
-            font-size: clamp(2.2rem, 5vw, 3.8rem); 
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            line-height: 1.1;
-            margin-bottom: 2rem;
-            color: #fff;
+        /* --- ANIMATIONS --- */
+        @keyframes frame-approach {
+            0%   { opacity: 0; transform: scale(0.1) translateZ(-2000px); }
+            15%  { opacity: 1; }
+            100% { opacity: 1; transform: scale(1) translateZ(0); }
         }
 
-        h1 span { color: var(--accent); }
-
-        .subtitle {
-            font-size: clamp(1.1rem, 2.2vw, 1.3rem);
-            line-height: 1.6;
-            color: var(--text-muted);
-            margin-bottom: 3.5rem;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
+        @keyframes text-approach {
+            0%   { opacity: 0; filter: blur(40px); transform: scale(0.5); }
+            20%  { opacity: 1; }
+            100% { opacity: 1; filter: blur(0); transform: scale(1); }
         }
 
-        .cta-btn {
-            display: inline-block;
-            padding: 18px 40px;
-            border: 1px solid var(--accent);
-            color: var(--accent);
-            text-decoration: none;
-            font-size: 15px;
-            font-weight: 700;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            margin-bottom: 8rem;
+        @keyframes inner-glow {
+            0%   { opacity: 1; }
+            70%  { opacity: 1; }
+            100% { opacity: 0; }
         }
 
-        /* --- REFINED KEYFRAMES --- */
-        @keyframes back-to-front-smooth {
-            0%   { opacity: 0; transform: scale(0.05) translateZ(-1500px); }
-            15%  { opacity: 0.2; }
-            45%  { opacity: 1; transform: scale(0.8) translateZ(-200px); }
-            75%  { opacity: 1; transform: scale(1.1) translateZ(100px); }
-            100% { opacity: 0; transform: scale(3) translateZ(1200px); }
+        @keyframes portal-exit {
+            to { 
+                opacity: 0; 
+                transform: scale(4);
+                pointer-events: none;
+            }
         }
 
-        @keyframes text-back-to-front-smooth {
-            0%   { opacity: 0; transform: translateZ(-1500px); filter: blur(30px); }
-            45%  { opacity: 1; filter: blur(0); transform: translateZ(-200px); }
-            75%  { opacity: 1; transform: translateZ(100px); filter: blur(2px); }
-            100% { opacity: 0; transform: translateZ(1200px) scale(2); filter: blur(20px); }
+        @keyframes emerge-from-portal {
+            0%   { opacity: 0; transform: scale(0.5) translateZ(-500px); }
+            100% { opacity: 1; transform: scale(1) translateZ(0); }
         }
 
-        @keyframes surface-content { to { opacity: 1; transform: translateY(0); } }
-        @keyframes fade-in { to { opacity: 1; } }
+        @keyframes fade-in {
+            0%   { opacity: 0; }
+            100% { opacity: 1; }
+        }
 
-        /* --- MOBILE MEDIA --- */
         @media (max-width: 768px) {
-            nav { padding: 30px; }
+            nav { padding: 0 30px; }
             .hamburger { display: block; }
             .nav-links {
                 position: fixed;
@@ -203,32 +278,22 @@
                 z-index: 105;
             }
             .menu-checkbox:checked ~ .nav-links { transform: translateX(0); }
-            .menu-checkbox:checked ~ .hamburger::before { content: 'CLOSE '; }
+            .corner-text { right: 30px; bottom: 30px; font-size: 9px; }
+            .portal-text { font-size: 22vmin; }
         }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="logo">3APTURE<span>.</span></div>
-        <input type="checkbox" id="menu-toggle" class="menu-checkbox">
-        <label for="menu-toggle" class="hamburger">MENU</label>
-        <div class="nav-links">
-            <a href="#">Technology</a>
-            <a href="#">Solutions</a>
-            <a href="#">Pricing</a>
-            <a href="#">Contact</a>
-        </div>
-    </nav>
-
-    <div class="scene">
-        <div class="rectangle">
+    <div class="portal-container">
+        <div class="portal-frame">
+            <div class="portal-inner"></div>
             <div class="portal-text">360</div>
         </div>
     </div>
 
-    <div class="content-container">
-        <div class="content-layer">
+    <div class="main-content">
+        <div class="content-wrapper">
             <h1>Capture Spaces in <span>3D/360</span> <br>for Virtual Viewing</h1>
             <p class="subtitle">Transform physical spaces into immersive virtual experiences.</p>
             <a href="#" class="cta-btn">Start Capturing Today</a>
@@ -249,6 +314,20 @@
             </div>
         </div>
     </div>
+
+    <nav>
+        <div class="logo">3APTURE<span>.</span></div>
+        <input type="checkbox" id="menu-toggle" class="menu-checkbox">
+        <label for="menu-toggle" class="hamburger"></label>
+        <div class="nav-links">
+            <a href="#">Technology</a>
+            <a href="#">Solutions</a>
+            <a href="#">Pricing</a>
+            <a href="#">Contact</a>
+        </div>
+    </nav>
+
+    <div class="corner-text">CAPTURE THE UNSEEN</div>
 
 </body>
 </html>
