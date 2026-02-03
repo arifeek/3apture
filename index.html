@@ -9,6 +9,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            max-width: 100vw;
         }
 
         :root {
@@ -16,6 +17,10 @@
             --accent-glow: rgba(0, 234, 255, 0.28);
             --accent-dim: rgba(0, 234, 255, 0.10);
             --border-white: rgba(255, 255, 255, 0.15);
+        }
+
+        html, body {
+            overflow-x: hidden;
         }
 
         body {
@@ -27,6 +32,7 @@
             position: relative;
             display: flex;
             flex-direction: column;
+            width: 100%;
         }
 
         /* Top Navigation */
@@ -201,7 +207,7 @@
 
         @keyframes frame-reveal {
             0%    { opacity: 1; transform: translateZ(-700px) scale(0.75); border-color: var(--accent); box-shadow: inset 0 0 80px rgba(0,0,0,0.95), 0 0 60px var(--accent-glow); }
-            100%  { opacity: 0; transform: translateZ(100px) scale(1.1); border-color: transparent; box-shadow: none; }
+            100%  { opacity: 0; transform: translateZ(100px) scale(1); border-color: transparent; box-shadow: none; }
         }
 
         .portal-text {
@@ -224,7 +230,7 @@
 
         @keyframes sink-and-fade {
             0%    { opacity: 1; transform: translate3d(0, 0, -1100px) scale(0.55); filter: blur(0); }
-            100%  { opacity: 0; transform: translate3d(0, 0, 120px) scale(1.06); filter: blur(10px); }
+            100%  { opacity: 0; transform: translate3d(0, 0, 120px) scale(1); filter: blur(10px); }
         }
 
         .site-content {
@@ -249,6 +255,8 @@
             align-items: center;
             justify-content: center;
             text-align: center;
+            width: 100%;
+            max-width: 100vw;
         }
 
         @keyframes content-surface {
@@ -453,10 +461,12 @@
         @media (max-width: 600px) {
             body {
                 overflow-y: auto;
+                overflow-x: hidden;
                 height: auto;
                 min-height: 100dvh;
+                position: relative;
             }
-
+            
             .top-nav {
                 padding: max(env(safe-area-inset-top), 18px) max(env(safe-area-inset-left), 20px) 18px max(env(safe-area-inset-right), 20px);
             }
@@ -466,14 +476,24 @@
             }
 
             .scene {
-                width: min(95vmin, 100vw);
+                width: 95vmin !important;
+                max-width: 100vw;
                 top: 45%;
+                left: 50%;
+                transform: translateX(-50%) translateY(-50%);
             }
 
             .site-content {
                 position: relative;
                 min-height: 100dvh;
                 padding: max(env(safe-area-inset-top), 100px) max(env(safe-area-inset-left), 20px) max(env(safe-area-inset-bottom), 200px) max(env(safe-area-inset-right), 20px);
+                width: 100%;
+                overflow-x: hidden;
+            }
+            
+            .content-wrapper {
+                padding: 0 5vw;
+                box-sizing: border-box;
             }
 
             .main-title {
@@ -495,12 +515,16 @@
             .cta-container {
                 gap: 14px;
                 max-width: 100%;
+                width: 100%;
+                padding: 0 5vw;
             }
 
             .cta-box {
                 padding: 20px 24px;
                 min-height: 56px;
                 font-size: 0.9rem;
+                width: 100%;
+                max-width: 100%;
             }
 
             footer {
@@ -515,11 +539,22 @@
             footer p {
                 font-size: 0.75rem;
             }
+            
+            .mobile-menu {
+                max-width: 100%;
+                right: -100%;
+            }
+            
+            .mobile-menu.active {
+                right: 0;
+            }
         }
 
         @media (max-width: 400px) {
             .main-title {
                 font-size: 2.5rem;
+                word-break: keep-all;
+                white-space: normal;
             }
 
             .subtitle {
@@ -533,6 +568,10 @@
 
             footer p {
                 font-size: 0.7rem;
+            }
+            
+            .scene {
+                width: 90vmin !important;
             }
         }
 
@@ -553,8 +592,12 @@
 
         /* Landscape mobile optimization */
         @media (max-width: 900px) and (orientation: landscape) and (max-height: 500px) {
+            body {
+                overflow-x: hidden;
+            }
+            
             .scene {
-                width: 50vmin;
+                width: 45vmin !important;
                 top: 50%;
             }
 
@@ -595,7 +638,6 @@
         <a href="#" class="logo"><span class="logo-number">3</span><span class="logo-text">apture</span><span class="dot">.</span></a>
         <ul class="nav-menu">
             <li><a href="#solutions">Solutions</a></li>
-            <li><a href="#technology">Technology</a></li>
             <li><a href="#about">About</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
@@ -609,7 +651,6 @@
     <div class="mobile-menu" id="mobileMenu">
         <ul>
             <li><a href="#solutions">Solutions</a></li>
-            <li><a href="#technology">Technology</a></li>
             <li><a href="#about">About</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
@@ -623,7 +664,7 @@
     <div class="site-content">
         <div class="content-wrapper">
             <h1 class="main-title">Spaces in 3D</h1>
-            <p class="subtitle">Scan • Model • View</p>
+            <p class="subtitle">Capture • Model • View</p>
             <div id="process" class="process-rotator">Scan Environment</div>
             
             <div class="cta-container">
@@ -651,8 +692,8 @@
     <script>
         // Process rotator
         const steps = [
-            "Scan Environment",
-            "Generate 3D Model",
+            "Capture Space",
+            "Create 3D Model",
             "View Space Anywhere"
         ];
 
