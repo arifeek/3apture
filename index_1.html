@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         * {
@@ -284,7 +285,7 @@
             text-transform: uppercase;
             color: rgba(255, 255, 255, 0.9);
             margin-top: 3vh;
-            margin-bottom: 5vh;
+            margin-bottom: 4vh;
             min-height: 1.5em;
             opacity: 0;
             transition: opacity 0.8s ease, transform 0.8s ease;
@@ -297,50 +298,85 @@
             transform: translateY(0);
         }
 
-        /* Buttons / CTA */
+        /* Buttons / CTA - Holographic Cards */
         .cta-container {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            gap: 15px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
             width: 100%;
             max-width: 900px;
             padding: 0 20px;
             pointer-events: auto;
-            flex-wrap: wrap; /* Allows buttons to wrap if you add many */
         }
 
         .cta-box {
-            flex: 1;
-            min-width: 140px; /* Ensures buttons don't get too squashed */
-            padding: 20px 10px;
-            background: linear-gradient(90deg, transparent 0%, var(--accent-dim) 50%, transparent 100%);
-            color: rgba(255, 255, 255, 0.6);
+            position: relative;
+            padding: 40px 30px;
+            background: linear-gradient(135deg, rgba(0, 234, 255, 0.03) 0%, rgba(0, 234, 255, 0.08) 100%);
+            border: 1px solid rgba(0, 234, 255, 0.2);
+            border-radius: 20px;
             text-decoration: none;
-            font-size: clamp(0.6rem, 1.5vw, 0.75rem);
-            font-weight: 500;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            border-top: 1px solid var(--accent-dim);
-            border-bottom: 1px solid var(--accent-dim);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            font-family: 'Inter', sans-serif;
         }
 
-        .cta-box span { position: relative; z-index: 1; }
+        .cta-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg at 50% 50%, transparent 0deg, var(--accent) 180deg, transparent 360deg);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            animation: rotate 4s linear infinite;
+        }
+
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
+        }
+
+        .cta-box:hover::before {
+            opacity: 0.15;
+        }
 
         .cta-box:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(0, 234, 255, 0.3), inset 0 0 40px rgba(0, 234, 255, 0.1);
+            border-color: var(--accent);
+        }
+
+        .cta-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .cta-title {
+            font-size: 1.2rem;
+            font-weight: 700;
             color: #fff;
-            background: linear-gradient(90deg, transparent 0%, var(--accent-dim) 50%, transparent 100%);
-            border-top-color: var(--accent);
-            border-bottom-color: var(--accent);
-            box-shadow: 0 0 30px var(--accent-glow), inset 0 0 20px var(--accent-dim);
-            transform: translateY(-2px);
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+            font-family: 'Rajdhani', sans-serif;
+            letter-spacing: 0.05em;
+        }
+
+        .cta-subtitle {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
+            position: relative;
+            z-index: 1;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
         }
 
         /* Footer */
@@ -395,11 +431,11 @@
         /* Media Queries */
         @media (max-width: 900px) {
             .cta-container {
-                flex-direction: column;
+                grid-template-columns: 1fr;
                 gap: 12px;
                 max-width: 500px;
             }
-            .cta-box { padding: 22px 20px; min-height: 60px; }
+            .cta-box { padding: 35px 20px; }
         }
 
         @media (max-width: 768px) {
@@ -433,8 +469,15 @@
             .subtitle { font-size: 1.3rem; margin: 20px 0 15px; }
             .process-rotator { font-size: 1rem; margin-bottom: 60px; }
 
-            .cta-container { gap: 14px; max-width: 100%; }
-            .cta-box { padding: 20px 24px; min-height: 56px; width: 100%; }
+            .cta-container { 
+                grid-template-columns: 1fr;
+                gap: 14px; 
+                max-width: 100%; 
+            }
+            .cta-box { 
+                padding: 28px 20px; 
+                width: 100%; 
+            }
 
             footer { padding: 30px 20px max(env(safe-area-inset-bottom), 30px) 20px; }
         }
@@ -445,7 +488,6 @@
         }
 
         @media (hover: none) and (pointer: coarse) {
-            .cta-box { min-height: 56px; }
             .cta-box:active { transform: scale(0.98); }
         }
     </style>
@@ -486,9 +528,23 @@
             <div id="process" class="process-rotator">Capture Space</div>
             
             <div class="cta-container">
-                <a href="#construction" class="cta-box"><span>Construction</span></a>
-                <a href="#hospitality" class="cta-box"><span>Hospitality</span></a>
-                <a href="#real-estate" class="cta-box"><span>Real Estate</span></a>
+                <a 
+                href="https://arifeek.github.io/1wh_gs/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="cta-box"
+                >
+                    <div class="cta-title">Construction</div>
+                    <div class="cta-subtitle">Pre Plaster Demo</div>
+                </a>
+                <a href="#hospitality" class="cta-box">
+                    <div class="cta-title">Hospitality</div>
+                    <div class="cta-subtitle">Cafe Demo</div>
+                </a>
+                <a href="#real-estate" class="cta-box">
+                    <div class="cta-title">Real Estate</div>
+                    <div class="cta-subtitle">House Demo</div>
+                </a>
             </div>
         </div>
     </div>
