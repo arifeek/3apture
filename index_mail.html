@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>3apture – Reveal the Space</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            max-width: 100vw;
+        }
+
+        :root {
+            --accent: #00eaff;
+            --accent-glow: rgba(0, 234, 255, 0.28);
+            --accent-dim: rgba(0, 234, 255, 0.10);
+            --border-white: rgba(255, 255, 255, 0.15);
+        }
+
+        html {
+            height: -webkit-fill-available;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100dvh;
+            min-height: -webkit-fill-available;
+            background: #0a0a0a;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            color: #f0f0f0;
+            width: 100%;
+            overflow-x: hidden;
+            overflow-y: auto; 
+        }
+
+        /* Top Navigation */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: max(env(safe-area-inset-top), 20px) max(env(safe-area-inset-left), 40px) 20px max(env(safe-area-inset-right), 40px);
+            z-index: 100;
+            background: linear-gradient(180deg, rgba(10, 10, 10, 0.95) 0%, rgba(10, 10, 10, 0.7) 70%, transparent 100%);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            font-weight: 900;
+            letter-spacing: -0.05em;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .logo .logo-number { color: var(--accent); }
+        .logo .logo-text { color: #ffffff; }
+        .logo .dot { color: var(--accent); }
+        .logo:hover { transform: scale(1.05); }
+
+        .nav-menu {
+            display: flex;
+            gap: clamp(25px, 4vw, 45px);
+            list-style: none;
+        }
+
+        .nav-menu a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu a:hover { color: #fff; }
+        .nav-menu a:hover::after { width: 100%; }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            z-index: 101;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 2px;
+            background: var(--accent);
+            transition: all 0.3s ease;
+        }
+
+        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(7px, 7px); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            max-width: 300px;
+            height: 100vh;
+            background: rgba(10, 10, 10, 0.98);
+            backdrop-filter: blur(20px);
+            padding: 100px 40px 40px;
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 99;
+            border-left: 1px solid var(--accent-dim);
+        }
+
+        .mobile-menu.active { right: 0; }
+
+        .mobile-menu ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .mobile-menu a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 1.1rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: block;
+            cursor: pointer;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--accent);
+            padding-left: 10px;
+        }
+
+        /* SHARED PANEL STYLES */
+        .contact-panel,
+        .about-panel,
+        .how-it-works-panel {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            max-width: 600px;
+            height: 100vh;
+            background: rgba(10, 10, 10, 0.98);
+            backdrop-filter: blur(30px);
+            padding: 100px 60px 60px;
+            transition: right 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 102;
+            border-left: 1px solid var(--accent-dim);
+            overflow-y: auto;
+        }
+
+        .contact-panel.active,
+        .about-panel.active,
+        .how-it-works-panel.active { right: 0; }
+
+        .contact-close,
+        .about-close,
+        .how-it-works-close {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border-white);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .contact-close:hover,
+        .about-close:hover,
+        .how-it-works-close:hover {
+            border-color: var(--accent);
+            transform: rotate(90deg);
+        }
+
+        .contact-close::before, .contact-close::after,
+        .about-close::before, .about-close::after,
+        .how-it-works-close::before, .how-it-works-close::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 2px;
+            background: var(--accent);
+        }
+
+        .contact-close::before, .about-close::before, .how-it-works-close::before { transform: rotate(45deg); }
+        .contact-close::after, .about-close::after, .how-it-works-close::after { transform: rotate(-45deg); }
+
+        .panel-header { margin-bottom: 50px; }
+        
+        .panel-title {
+            font-size: clamp(2.5rem, 6vw, 3.5rem);
+            font-weight: 900;
+            letter-spacing: -0.05em;
+            color: #fff;
+            margin-bottom: 15px;
+            line-height: 1;
+        }
+
+        .panel-title .accent { color: var(--accent); }
+
+        .panel-subtitle {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 0.05em;
+            line-height: 1.6;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .form-label {
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .form-input,
+        .form-textarea {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-white);
+            border-radius: 8px;
+            padding: 15px 20px;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        .form-submit {
+            background: linear-gradient(135deg, var(--accent) 0%, rgba(0, 234, 255, 0.7) 100%);
+            border: 1px solid var(--accent);
+            border-radius: 8px;
+            padding: 18px 40px;
+            color: #0a0a0a;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .form-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px var(--accent-glow);
+        }
+        
+        .form-submit:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .contact-info {
+            margin-top: 50px;
+            padding-top: 40px;
+            border-top: 1px solid var(--border-white);
+        }
+
+        .contact-info-title {
+            font-size: 0.85rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .contact-details {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .contact-detail {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+        }
+
+        .contact-detail-icon {
+            width: 20px;
+            height: 20px;
+            color: var(--accent);
+        }
+
+        .contact-detail a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-detail a:hover { color: var(--accent); }
+
+        .panel-content {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .panel-section {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .section-number {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--accent);
+            line-height: 1;
+            opacity: 0.3;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .section-text {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.8;
+        }
+
+        .panel-highlight {
+            background: rgba(0, 234, 255, 0.05);
+            border-left: 3px solid var(--accent);
+            padding: 25px 30px;
+            margin-top: 30px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .panel-highlight-text {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.7;
+        }
+
+        /* Scene & Background */
+        .scene {
+            width: min(90vmin, 100vw);
+            aspect-ratio: 1 / 1;
+            perspective: 1000px;
+            position: fixed; 
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            display: grid;
+            place-items: center;
+            pointer-events: none;
+        }
+
+        .rectangle {
+            grid-area: 1/1;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, #1e1e1e 0%, #111 70%, #0a0a0a 100%);
+            border: 1px solid rgba(80,80,80,0.4);
+            box-shadow: inset 0 0 80px rgba(0,0,0,0.95);
+            transform-style: preserve-3d;
+            animation: frame-reveal 7s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+        }
+
+        @keyframes frame-reveal {
+            0%    { opacity: 1; transform: translateZ(-700px) scale(0.75); border-color: var(--accent); box-shadow: inset 0 0 80px rgba(0,0,0,0.95), 0 0 60px var(--accent-glow); }
+            100%  { opacity: 0; transform: translateZ(100px) scale(1); border-color: transparent; box-shadow: none; }
+        }
+
+        .portal-text {
+            grid-area: 1/1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: clamp(20vmin, 35vmin, 50vmin);
+            font-weight: 900;
+            letter-spacing: -0.07em;
+            mix-blend-mode: difference;
+            transform-style: preserve-3d;
+            text-shadow: 0 0 50px var(--accent-glow);
+            text-align: center;
+            animation: sink-and-fade 7s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+        }
+
+        @keyframes sink-and-fade {
+            0%    { opacity: 1; transform: translate3d(0, 0, -1100px) scale(0.55); filter: blur(0); }
+            100%  { opacity: 0; transform: translate3d(0, 0, 120px) scale(1); filter: blur(10px); }
+        }
+
+        /* Site Content */
+        .site-content {
+            position: relative;
+            flex: 1; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            z-index: 10;
+            padding: max(env(safe-area-inset-top), 120px) 20px 40px 20px;
+        }
+
+        .content-wrapper {
+            max-width: 1400px;
+            width: 100%;
+            padding: 0 40px;
+        }
+
+        .main-title {
+            font-size: clamp(4rem, 10vw, 8rem);
+            font-weight: 900;
+            letter-spacing: -0.05em;
+            line-height: 0.95;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fade-slide-up 1.8s 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes fade-slide-up {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .subtitle {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: clamp(1.3rem, 3vw, 1.6rem);
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.6);
+            margin: 25px 0 20px;
+            opacity: 0;
+            animation: fade-slide-up 1.8s 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .process-rotator {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: clamp(1.3rem, 3vw, 1.6rem);
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 80px;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+            text-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .process-rotator.active { opacity: 1; }
+
+        .cta-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            opacity: 0;
+            animation: fade-slide-up 1.8s 2.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .cta-box {
+            position: relative;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, rgba(0, 234, 255, 0.03) 0%, rgba(0, 234, 255, 0.08) 100%);
+            border: 1px solid rgba(0, 234, 255, 0.2);
+            border-radius: 20px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        .cta-box:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 234, 255, 0.15);
+        }
+
+        .cta-title {
+            font-size: clamp(1.4rem, 2.5vw, 1.8rem);
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .cta-subtitle {
+            font-size: clamp(1.2rem, 2.2vw, 1.4rem);
+            color: rgba(255, 255, 255, 0.8);
+            text-transform: uppercase;
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        footer {
+            flex-shrink: 0;
+            width: 100%;
+            padding: 30px max(env(safe-area-inset-left), 40px) max(env(safe-area-inset-bottom), 30px) max(env(safe-area-inset-right), 40px);
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: end;
+            z-index: 10;
+            opacity: 0;
+            animation: footer-fade 2s 6s forwards;
+            background: linear-gradient(0deg, rgba(10, 10, 10, 0.95) 0%, rgba(10, 10, 10, 0.7) 50%, transparent 100%);
+        }
+
+        @keyframes footer-fade { to { opacity: 1; } }
+
+        .footer-left { display: flex; flex-direction: column; gap: 8px; }
+        .footer-center { text-align: center; }
+        .footer-logo { font-weight: 900; font-size: 1rem; }
+        .footer-logo .logo-number { color: var(--accent); }
+        .footer-logo .logo-text { color: rgba(255, 255, 255, 0.5); }
+        .footer-logo span.dot { color: var(--accent); }
+        .footer-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+
+        footer p { font-size: 0.75rem; text-transform: uppercase; color: rgba(255, 255, 255, 0.4); }
+        footer a { color: rgba(255, 255, 255, 0.4); text-decoration: none; transition: color 0.3s ease; }
+        footer a:hover { color: var(--accent); }
+
+        /* Media Queries */
+        @media (max-width: 900px) {
+            .cta-container { grid-template-columns: 1fr; gap: 12px; max-width: 500px; }
+            .cta-box { padding: 35px 20px; }
+            .contact-panel, .about-panel, .how-it-works-panel { max-width: 500px; padding: 100px 40px 60px; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu { display: none; }
+            .hamburger { display: flex; }
+            footer { grid-template-columns: 1fr; gap: 20px; text-align: center; }
+            .footer-left, .footer-center, .footer-right { align-items: center; }
+            .contact-panel, .about-panel, .how-it-works-panel { max-width: 100%; padding: 80px 30px 40px; }
+            .contact-close, .about-close, .how-it-works-close { top: 25px; right: 25px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <a href="#" class="logo"><span class="logo-number">3</span><span class="logo-text">apture</span><span class="dot">.</span></a>
+        <ul class="nav-menu">
+            <li><a id="howItWorksTrigger">How It Works</a></li>
+            <li><a id="aboutTrigger">About</a></li>
+            <li><a id="contactTrigger">Contact</a></li>
+        </ul>
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a id="howItWorksTriggerMobile">How It Works</a></li>
+            <li><a id="aboutTriggerMobile">About</a></li>
+            <li><a id="contactTriggerMobile">Contact</a></li>
+        </ul>
+    </div>
+
+    <div class="how-it-works-panel" id="howItWorksPanel">
+        <div class="how-it-works-close" id="howItWorksClose"></div>
+        <div class="panel-header">
+            <h2 class="panel-title">Our <span class="accent">Process</span></h2>
+            <p class="panel-subtitle">From physical space to digital walk-through.</p>
+        </div>
+        <div class="panel-content">
+            <div class="panel-section">
+                <div class="section-number">01</div>
+                <h3 class="section-title">Capture the Space</h3>
+                <p class="section-text">We capture your space using a 360° camera, recording the full environment from multiple positions. This creates a complete visual record of the area.</p>
+            </div>
+            <div class="panel-section">
+                <div class="section-number">02</div>
+                <h3 class="section-title">Build the Walk-Through</h3>
+                <p class="section-text">The captured images are processed into a single, connected walk-through. Viewpoints are linked together so the space can be explored in a clear way.</p>
+            </div>
+            <div class="panel-section">
+                <div class="section-number">03</div>
+                <h3 class="section-title">View Online</h3>
+                <p class="section-text">The walk-through can be viewed on desktop, tablet, or mobile. It can be shared with others or embedded on a website without requiring special software.</p>
+            </div>
+            <div class="panel-highlight">
+                <p class="panel-highlight-text">A straightforward way to record and view a space online.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="about-panel" id="aboutPanel">
+        <div class="about-close" id="aboutClose"></div>
+        <div class="panel-header">
+            <h2 class="panel-title">Who <span class="accent">We Are</span></h2>
+            <p class="panel-subtitle">Making 3D space capture more widely accessible.</p>
+        </div>
+        <div class="panel-content">
+            <div class="panel-section">
+                <h3 class="section-title">What We Do</h3>
+                <p class="section-text">3apture creates digital walk-throughs of physical spaces. They allow people to move through a place virtually and understand its layout and structure.</p>
+            </div>
+            <div class="panel-section">
+                <h3 class="section-title">Why It Works</h3>
+                <p class="section-text">Seeing a space properly makes decisions easier. Our tours are designed to be clear, intuitive, and accessible on any device, so anyone can understand how a place feels.</p>
+            </div>
+            <div class="panel-highlight">
+                <p class="panel-highlight-text">Explore a space online. Get a better sense of it. Then decide what comes next.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="contact-panel" id="contactPanel">
+        <div class="contact-close" id="contactClose"></div>
+        <div class="panel-header">
+            <h2 class="panel-title">Let's <span class="accent">Connect</span></h2>
+            <p class="panel-subtitle">Transform your physical spaces into an immersive virtual experience.</p>
+        </div>
+        <form class="contact-form" id="contactForm">
+            <div class="form-group">
+                <label class="form-label" for="name">Your Name</label>
+                <input type="text" name="name" id="name" class="form-input" placeholder="John Doe" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="email">Email Address</label>
+                <input type="email" name="email" id="email" class="form-input" placeholder="john@example.com" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="message">Project Details</label>
+                <textarea name="message" id="message" class="form-textarea" placeholder="Tell us about your space..." required></textarea>
+            </div>
+            <button type="submit" class="form-submit">Send Message</button>
+        </form>
+
+        <div class="contact-info">
+            <h3 class="contact-info-title">Direct Contact</h3>
+            <div class="contact-details">
+                <div class="contact-detail">
+                    <svg class="contact-detail-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                    <a href="mailto:info@3apture.com">info@3apture.com</a>
+                </div>
+                <div class="contact-detail">
+                    <svg class="contact-detail-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    <span>Melbourne, Victoria, AU</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="scene">
+        <div class="rectangle"></div>
+        <div class="portal-text">capture</div>
+    </div>
+
+    <div class="site-content">
+        <div class="content-wrapper">
+            <h1 class="main-title">Spaces in 3D</h1>
+            <p class="subtitle">Capture • Model • View</p>
+            <div id="process" class="process-rotator">Capture Space</div>
+            <div class="cta-container">
+                <a href="https://arifeek.github.io/1wh_gs/" target="_blank" class="cta-box">
+                    <div class="cta-title">Construction</div>
+                    <div class="cta-subtitle">Pre Plaster Demo →</div>
+                </a>
+                <a href="#" class="cta-box">
+                    <div class="cta-title">Hospitality</div>
+                    <div class="cta-subtitle">Cafe Demo</div>
+                </a>
+                <a href="#" class="cta-box">
+                    <div class="cta-title">Real Estate</div>
+                    <div class="cta-subtitle">House Demo</div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-left"><p>&copy; 2026 3apture</p><p>Advanced Space Capture</p></div>
+        <div class="footer-center">
+            <div class="footer-logo"><span class="logo-number">3</span><span class="logo-text">apture</span><span class="dot">.</span></div>
+        </div>
+        <div class="footer-right"><p><a href="#">Privacy Policy</a></p><p><a href="#">Terms of Service</a></p></div>
+    </footer>
+
+    <script>
+        // --- Process Rotator ---
+        const steps = ["Space Captured", "Model Created", "View Anywhere"];
+        let currentIndex = 0;
+        const processEl = document.getElementById('process');
+        let isAnimating = false;
+
+        function rotateProcess() {
+            if (isAnimating) return;
+            isAnimating = true;
+            processEl.classList.remove('active');
+            const onTransitionEnd = (e) => {
+                if (e.propertyName !== 'opacity') return;
+                processEl.removeEventListener('transitionend', onTransitionEnd);
+                currentIndex = (currentIndex + 1) % steps.length;
+                processEl.textContent = steps[currentIndex];
+                void processEl.offsetWidth; 
+                processEl.classList.add('active');
+                isAnimating = false;
+            };
+            processEl.addEventListener('transitionend', onTransitionEnd);
+        }
+        setTimeout(() => { processEl.classList.add('active'); setInterval(rotateProcess, 3500); }, 2000);
+
+        // --- Panel Navigation ---
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const panels = {
+            contact: document.getElementById('contactPanel'),
+            about: document.getElementById('aboutPanel'),
+            howItWorks: document.getElementById('howItWorksPanel')
+        };
+
+        function closeAllPanels() {
+            Object.values(panels).forEach(p => p.classList.remove('active'));
+            hamburger.classList.remove('active');
+            mobileMenu.classList.remove('active');
+        }
+
+        function togglePanel(panelKey) {
+            const isActive = panels[panelKey].classList.contains('active');
+            closeAllPanels();
+            if (!isActive) {
+                setTimeout(() => panels[panelKey].classList.add('active'), 50);
+            }
+        }
+
+        document.getElementById('contactTrigger').onclick = (e) => { e.preventDefault(); togglePanel('contact'); };
+        document.getElementById('contactTriggerMobile').onclick = (e) => { e.preventDefault(); togglePanel('contact'); };
+        document.getElementById('aboutTrigger').onclick = (e) => { e.preventDefault(); togglePanel('about'); };
+        document.getElementById('aboutTriggerMobile').onclick = (e) => { e.preventDefault(); togglePanel('about'); };
+        document.getElementById('howItWorksTrigger').onclick = (e) => { e.preventDefault(); togglePanel('howItWorks'); };
+        document.getElementById('howItWorksTriggerMobile').onclick = (e) => { e.preventDefault(); togglePanel('howItWorks'); };
+
+        document.getElementById('contactClose').onclick = closeAllPanels;
+        document.getElementById('aboutClose').onclick = closeAllPanels;
+        document.getElementById('howItWorksClose').onclick = closeAllPanels;
+
+        hamburger.onclick = () => { hamburger.classList.toggle('active'); mobileMenu.classList.toggle('active'); };
+
+        // --- Click Outside to Close Fix ---
+        document.addEventListener('mousedown', (e) => {
+            const activePanel = Object.values(panels).find(p => p.classList.contains('active'));
+            if (activePanel) {
+                // If clicking outside the panel AND not clicking on a trigger element
+                const isClickInPanel = activePanel.contains(e.target);
+                const isClickOnTrigger = e.target.closest('.nav-menu') || e.target.closest('.mobile-menu') || e.target.closest('.hamburger');
+                
+                if (!isClickInPanel && !isClickOnTrigger) {
+                    closeAllPanels();
+                }
+            }
+        });
+
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAllPanels(); });
+
+        // --- Web3Forms Logic ---
+        const contactForm = document.getElementById('contactForm');
+        const submitBtn = contactForm.querySelector('button[type="submit"]');
+
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const ACCESS_KEY = "c209b028-5eac-46db-9c5e-035297174590";
+            const formData = new FormData(contactForm);
+            formData.set("access_key", ACCESS_KEY);
+
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = "Sending...";
+            submitBtn.disabled = true;
+
+            try {
+                const response = await fetch("https://api.web3forms.com/submit", {
+                    method: "POST",
+                    headers: { "Accept": "application/json" },
+                    body: formData
+                });
+                const data = await response.json();
+                if (data.success) {
+                    alert("Success! Your message has been sent.");
+                    contactForm.reset();
+                    closeAllPanels();
+                } else {
+                    alert("Error: " + data.message);
+                }
+            } catch (err) {
+                alert("Something went wrong. Please try again.");
+            } finally {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
