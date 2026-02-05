@@ -26,23 +26,19 @@
         }
 
         html {
-            /* Handles iOS address bar scroll behavior nicely */
             height: -webkit-fill-available;
         }
 
         body {
-            /* Flex layout enables the "Sticky Footer" effect */
             display: flex;
             flex-direction: column;
             min-height: 100dvh;
             min-height: -webkit-fill-available;
-            
             background: #0a0a0a;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
             color: #f0f0f0;
             width: 100%;
             overflow-x: hidden;
-            /* Allow vertical scroll if content gets too tall */
             overflow-y: auto; 
         }
 
@@ -168,9 +164,7 @@
             padding-left: 10px;
         }
 
-        /* SHARED PANEL STYLES 
-           Applied to Contact, About, and How It Works panels
-        */
+        /* SHARED PANEL STYLES */
         .contact-panel,
         .about-panel,
         .how-it-works-panel {
@@ -184,7 +178,7 @@
             backdrop-filter: blur(30px);
             padding: 100px 60px 60px;
             transition: right 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 98;
+            z-index: 102;
             border-left: 1px solid var(--accent-dim);
             overflow-y: auto;
         }
@@ -193,7 +187,6 @@
         .about-panel.active,
         .how-it-works-panel.active { right: 0; }
 
-        /* Shared Close Button Styles */
         .contact-close,
         .about-close,
         .how-it-works-close {
@@ -231,7 +224,6 @@
         .contact-close::before, .about-close::before, .how-it-works-close::before { transform: rotate(45deg); }
         .contact-close::after, .about-close::after, .how-it-works-close::after { transform: rotate(-45deg); }
 
-        /* Panel Headers & Content Typography */
         .panel-header { margin-bottom: 50px; }
         
         .panel-title {
@@ -252,7 +244,6 @@
             line-height: 1.6;
         }
 
-        /* Specific Contact Form Styles */
         .contact-form {
             display: flex;
             flex-direction: column;
@@ -296,7 +287,6 @@
         .form-textarea {
             resize: vertical;
             min-height: 150px;
-            font-family: 'Inter', sans-serif;
         }
 
         .form-submit {
@@ -318,6 +308,11 @@
         .form-submit:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 30px var(--accent-glow);
+        }
+        
+        .form-submit:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
         }
 
         .contact-info {
@@ -347,7 +342,6 @@
             gap: 15px;
             color: rgba(255, 255, 255, 0.7);
             font-size: 0.95rem;
-            letter-spacing: 0.02em;
         }
 
         .contact-detail-icon {
@@ -362,11 +356,8 @@
             transition: color 0.3s ease;
         }
 
-        .contact-detail a:hover {
-            color: var(--accent);
-        }
+        .contact-detail a:hover { color: var(--accent); }
 
-        /* Generic Panel Content Styles (Used in How It Works & About) */
         .panel-content {
             display: flex;
             flex-direction: column;
@@ -391,7 +382,6 @@
             font-size: 1.4rem;
             font-weight: 700;
             color: #fff;
-            letter-spacing: -0.02em;
             margin-bottom: 5px;
         }
 
@@ -399,7 +389,6 @@
             font-size: 1rem;
             color: rgba(255, 255, 255, 0.7);
             line-height: 1.8;
-            letter-spacing: 0.01em;
         }
 
         .panel-highlight {
@@ -414,10 +403,9 @@
             font-size: 1.1rem;
             color: rgba(255, 255, 255, 0.8);
             line-height: 1.7;
-            letter-spacing: 0.02em;
         }
 
-        /* Scene (3D Background) */
+        /* Scene & Background */
         .scene {
             width: min(90vmin, 100vw);
             aspect-ratio: 1 / 1;
@@ -461,9 +449,7 @@
             transform-style: preserve-3d;
             text-shadow: 0 0 50px var(--accent-glow);
             text-align: center;
-            transform-origin: center center;
             animation: sink-and-fade 7s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
-            font-family: 'Inter', sans-serif;
         }
 
         @keyframes sink-and-fade {
@@ -471,7 +457,7 @@
             100%  { opacity: 0; transform: translate3d(0, 0, 120px) scale(1); filter: blur(10px); }
         }
 
-        /* Content Wrapper */
+        /* Site Content */
         .site-content {
             position: relative;
             flex: 1; 
@@ -491,15 +477,13 @@
         }
 
         .main-title {
-            font-size: clamp(4rem, 16vw, 10rem);
+            font-size: clamp(4rem, 10vw, 8rem);
             font-weight: 900;
             letter-spacing: -0.05em;
             line-height: 0.95;
             margin-bottom: 20px;
-            text-transform: none;
             opacity: 0;
             animation: fade-slide-up 1.8s 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            font-family: 'Inter', sans-serif;
         }
 
         @keyframes fade-slide-up {
@@ -510,7 +494,6 @@
         .subtitle {
             font-family: 'Rajdhani', sans-serif;
             font-size: clamp(1.3rem, 3vw, 1.6rem);
-            font-weight: 400;
             letter-spacing: 0.35em;
             text-transform: uppercase;
             color: rgba(255, 255, 255, 0.6);
@@ -526,12 +509,8 @@
             letter-spacing: 0.2em;
             text-transform: uppercase;
             color: var(--accent);
-            margin-bottom: 80px;
-            
-            /* Optimized for iOS */
+            margin-bottom: 60px;
             opacity: 0;
-            transform: translate3d(0, 0, 0);
-            will-change: opacity;
             transition: opacity 0.8s ease;
             text-shadow: 0 0 20px var(--accent-glow);
         }
@@ -550,7 +529,7 @@
 
         .cta-box {
             position: relative;
-            padding: 50px 30px;
+            padding: 40px 20px;
             background: linear-gradient(135deg, rgba(0, 234, 255, 0.03) 0%, rgba(0, 234, 255, 0.08) 100%);
             border: 1px solid rgba(0, 234, 255, 0.2);
             border-radius: 20px;
@@ -560,45 +539,26 @@
             overflow: hidden;
         }
 
-        .cta-box::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--accent), transparent);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
         .cta-box:hover {
             border-color: var(--accent);
             transform: translateY(-5px);
             box-shadow: 0 15px 40px rgba(0, 234, 255, 0.15);
         }
 
-        .cta-box:hover::before { opacity: 1; }
-
         .cta-title {
             font-size: clamp(1.4rem, 2.5vw, 1.8rem);
             font-weight: 600;
-            letter-spacing: -0.02em;
             color: #fff;
             margin-bottom: 8px;
-            font-family: 'Inter', sans-serif;
         }
 
         .cta-subtitle {
             font-size: clamp(1.2rem, 2.2vw, 1.4rem);
-            font-weight: 400;
-            letter-spacing: 0.05em;
             color: rgba(255, 255, 255, 0.8);
             text-transform: uppercase;
             font-family: 'Rajdhani', sans-serif;
         }
 
-        /* Footer */
         footer {
             flex-shrink: 0;
             width: 100%;
@@ -616,109 +576,30 @@
 
         .footer-left { display: flex; flex-direction: column; gap: 8px; }
         .footer-center { text-align: center; }
-        
-        .footer-logo {
-            font-weight: 900;
-            font-size: 1rem;
-            letter-spacing: -0.02em;
-            font-family: 'Inter', sans-serif;
-        }
+        .footer-logo { font-weight: 900; font-size: 1rem; }
         .footer-logo .logo-number { color: var(--accent); }
         .footer-logo .logo-text { color: rgba(255, 255, 255, 0.5); }
         .footer-logo span.dot { color: var(--accent); }
-
         .footer-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
 
-        footer p {
-            font-size: 0.75rem;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.4);
-            line-height: 1.6;
-            font-family: 'Inter', sans-serif;
-        }
-
-        footer a {
-            color: rgba(255, 255, 255, 0.4);
-            text-decoration: none;
-            transition: color 0.3s ease;
-            font-family: 'Inter', sans-serif;
-        }
+        footer p { font-size: 0.75rem; text-transform: uppercase; color: rgba(255, 255, 255, 0.4); }
+        footer a { color: rgba(255, 255, 255, 0.4); text-decoration: none; transition: color 0.3s ease; }
         footer a:hover { color: var(--accent); }
 
         /* Media Queries */
         @media (max-width: 900px) {
-            .cta-container {
-                grid-template-columns: 1fr;
-                gap: 12px;
-                max-width: 500px;
-            }
+            .cta-container { grid-template-columns: 1fr; gap: 12px; max-width: 500px; }
             .cta-box { padding: 35px 20px; }
-            
-            .contact-panel, .about-panel, .how-it-works-panel {
-                max-width: 500px;
-                padding: 100px 40px 60px;
-            }
+            .contact-panel, .about-panel, .how-it-works-panel { max-width: 500px; padding: 100px 40px 60px; }
         }
 
         @media (max-width: 768px) {
             .nav-menu { display: none; }
             .hamburger { display: flex; }
             footer { grid-template-columns: 1fr; gap: 20px; text-align: center; }
-            .footer-left, .footer-center, .footer-right { align-items: center; text-align: center; }
-            
-            .contact-panel, .about-panel, .how-it-works-panel {
-                max-width: 100%;
-                padding: 80px 30px 40px;
-            }
-            
-            .contact-close, .about-close, .how-it-works-close {
-                top: 25px;
-                right: 25px;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .top-nav { padding: max(env(safe-area-inset-top), 18px) max(env(safe-area-inset-left), 20px) 18px max(env(safe-area-inset-right), 20px); }
-            
-            .scene { width: 95vmin !important; }
-
-            .site-content { padding: max(env(safe-area-inset-top), 100px) 20px 40px 20px; }
-            
-            .content-wrapper { padding: 0 5vw; }
-
-            .main-title {
-                font-size: clamp(2.8rem, 15vw, 7rem);
-                line-height: 0.9;
-                margin-top: 20px;
-            }
-
-            .subtitle { font-size: 1.3rem; margin: 20px 0 15px; }
-            .process-rotator { font-size: 1.4rem; margin-bottom: 60px; }
-
-            .cta-container { 
-                grid-template-columns: 1fr;
-                gap: 14px; 
-                max-width: 100%; 
-            }
-            .cta-box { padding: 28px 20px; width: 100%; }
-
-            footer { padding: 30px 20px max(env(safe-area-inset-bottom), 30px) 20px; }
-            
-            .contact-panel, .about-panel, .how-it-works-panel {
-                padding: 70px 25px 40px;
-            }
-            
-            .panel-title { font-size: 2rem; }
-        }
-
-        @media (max-width: 400px) {
-            .main-title { font-size: 2.5rem; word-break: keep-all; white-space: normal; }
-            .scene { width: 90vmin !important; }
-        }
-
-        @media (hover: none) and (pointer: coarse) {
-            .cta-box:active { transform: scale(0.98); }
+            .footer-left, .footer-center, .footer-right { align-items: center; }
+            .contact-panel, .about-panel, .how-it-works-panel { max-width: 100%; padding: 80px 30px 40px; }
+            .contact-close, .about-close, .how-it-works-close { top: 25px; right: 25px; }
         }
     </style>
 </head>
@@ -748,112 +629,72 @@
 
     <div class="how-it-works-panel" id="howItWorksPanel">
         <div class="how-it-works-close" id="howItWorksClose"></div>
-        
         <div class="panel-header">
             <h2 class="panel-title">Our <span class="accent">Process</span></h2>
             <p class="panel-subtitle">From physical space to digital walk-through.</p>
         </div>
-
         <div class="panel-content">
             <div class="panel-section">
                 <div class="section-number">01</div>
                 <h3 class="section-title">Capture the Space</h3>
-                <p class="section-text">
-                    We capture your space using a 360° camera, recording the full environment from multiple positions.
-                    This creates a complete visual record of the area.
-                </p>
+                <p class="section-text">We capture your space using a 360° camera, recording the full environment from multiple positions. This creates a complete visual record of the area.</p>
             </div>
-
             <div class="panel-section">
                 <div class="section-number">02</div>
                 <h3 class="section-title">Build the Walk-Through</h3>
-                <p class="section-text">
-                    The captured images are processed into a single, connected walk-through.
-                    Viewpoints are linked together so the space can be explored in a clear and consistent way.
-                </p>
+                <p class="section-text">The captured images are processed into a single, connected walk-through. Viewpoints are linked together so the space can be explored in a clear way.</p>
             </div>
-
             <div class="panel-section">
                 <div class="section-number">03</div>
                 <h3 class="section-title">View Online</h3>
-                <p class="section-text">
-                    The walk-through can be viewed on desktop, tablet, or mobile.
-                    It can be shared with others or embedded on a website without requiring special software.
-                </p>
+                <p class="section-text">The walk-through can be viewed on desktop, tablet, or mobile. It can be shared with others or embedded on a website without requiring special software.</p>
             </div>
-
             <div class="panel-highlight">
-                <p class="panel-highlight-text">
-                    A straightforward way to record and view a space on-line.
-                </p>
+                <p class="panel-highlight-text">A straightforward way to record and view a space online.</p>
             </div>
         </div>
     </div>
 
     <div class="about-panel" id="aboutPanel">
         <div class="about-close" id="aboutClose"></div>
-        
         <div class="panel-header">
             <h2 class="panel-title">Who <span class="accent">We Are</span></h2>
             <p class="panel-subtitle">Making 3D space capture more widely accessible.</p>
         </div>
-
         <div class="panel-content">
             <div class="panel-section">
                 <h3 class="section-title">What We Do</h3>
-                <p class="section-text">
-                    3apture creates digital walk-throughs of physical spaces. 
-                    They allow people to move through a place virtually and understand its layout and structure.
-                </p>
+                <p class="section-text">3apture creates digital walk-throughs of physical spaces. They allow people to move through a place virtually and understand its layout and structure.</p>
             </div>
-
             <div class="panel-section">
                 <h3 class="section-title">Why It Works</h3>
-                <p class="section-text">
-                    Seeing a space properly makes decisions easier. 
-                    Our tours are designed to be clear, intuitive, and accessible on any device, 
-                    so anyone can understand how a place feels and flows without being there in person.
-                </p>
+                <p class="section-text">Seeing a space properly makes decisions easier. Our tours are designed to be clear, intuitive, and accessible on any device, so anyone can understand how a place feels.</p>
             </div>
-
             <div class="panel-highlight">
-                <p class="panel-highlight-text">
-                    Explore a space online. Get a better sense of it. Then decide what comes next.
-                </p>
+                <p class="panel-highlight-text">Explore a space online. Get a better sense of it. Then decide what comes next.</p>
             </div>
         </div>
-
     </div>
 
     <div class="contact-panel" id="contactPanel">
         <div class="contact-close" id="contactClose"></div>
-        
         <div class="panel-header">
             <h2 class="panel-title">Let's <span class="accent">Connect</span></h2>
             <p class="panel-subtitle">Transform your physical spaces into an immersive virtual experience.</p>
         </div>
-
         <form class="contact-form" id="contactForm">
             <div class="form-group">
                 <label class="form-label" for="name">Your Name</label>
-                <input type="text" id="name" class="form-input" placeholder="John Doe" required>
+                <input type="text" name="name" id="name" class="form-input" placeholder="John Doe" required>
             </div>
-
             <div class="form-group">
                 <label class="form-label" for="email">Email Address</label>
-                <input type="email" id="email" class="form-input" placeholder="john@example.com" required>
+                <input type="email" name="email" id="email" class="form-input" placeholder="john@example.com" required>
             </div>
-
             <div class="form-group">
-                <label class="form-label" for="phone">Phone Number</label>
-                <input type="tel" id="phone" class="form-input" placeholder="+1 (555) 000-0000">
+                <label class="form-label" for="message">Project Details</label>
+                <textarea name="message" id="message" class="form-textarea" placeholder="Tell us about your space..." required></textarea>
             </div>
-
-            <div class="form-group">
-                <label class="form-label" for="project">Project Details</label>
-                <textarea id="project" class="form-textarea" placeholder="Tell us about your space and what you'd like to achieve..." required></textarea>
-            </div>
-
             <button type="submit" class="form-submit">Send Message</button>
         </form>
 
@@ -861,22 +702,11 @@
             <h3 class="contact-info-title">Direct Contact</h3>
             <div class="contact-details">
                 <div class="contact-detail">
-                    <svg class="contact-detail-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                    </svg>
-                    <a href="mailto:hello@3apture.com">hello@3apture.com</a>
+                    <svg class="contact-detail-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                    <a href="mailto:info@3apture.com">info@3apture.com</a>
                 </div>
                 <div class="contact-detail">
-                    <svg class="contact-detail-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-                    </svg>
-                    <a href="tel:+15550000000">+1 (555) 000-0000</a>
-                </div>
-                <div class="contact-detail">
-                    <svg class="contact-detail-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                    </svg>
+                    <svg class="contact-detail-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                     <span>Melbourne, Victoria, AU</span>
                 </div>
             </div>
@@ -893,22 +723,16 @@
             <h1 class="main-title">Spaces in 3D</h1>
             <p class="subtitle">Capture • Model • View</p>
             <div id="process" class="process-rotator">Capture Space</div>
-            
             <div class="cta-container">
-                <a 
-                href="https://arifeek.github.io/1wh_gs/" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                class="cta-box"
-                >
+                <a href="https://arifeek.github.io/1wh_gs/" target="_blank" class="cta-box">
                     <div class="cta-title">Construction</div>
                     <div class="cta-subtitle">Pre Plaster Demo →</div>
                 </a>
-                <a href="#hospitality" class="cta-box">
+                <a href="#" class="cta-box">
                     <div class="cta-title">Hospitality</div>
                     <div class="cta-subtitle">Cafe Demo</div>
                 </a>
-                <a href="#real-estate" class="cta-box">
+                <a href="#" class="cta-box">
                     <div class="cta-title">Real Estate</div>
                     <div class="cta-subtitle">House Demo</div>
                 </a>
@@ -917,27 +741,16 @@
     </div>
 
     <footer>
-        <div class="footer-left">
-            <p>&copy; 2026 3apture</p>
-            <p>Advanced Space Capture</p>
-        </div>
+        <div class="footer-left"><p>&copy; 2026 3apture</p><p>Advanced Space Capture</p></div>
         <div class="footer-center">
             <div class="footer-logo"><span class="logo-number">3</span><span class="logo-text">apture</span><span class="dot">.</span></div>
         </div>
-        <div class="footer-right">
-            <p><a href="#privacy">Privacy Policy</a></p>
-            <p><a href="#terms">Terms of Service</a></p>
-        </div>
+        <div class="footer-right"><p><a href="#">Privacy Policy</a></p><p><a href="#">Terms of Service</a></p></div>
     </footer>
 
     <script>
-        // --- Process Rotator with TransitionEnd Event (Fixes iOS Stutter) ---
-        const steps = [
-            "Space Captured",
-            "Model Created",
-            "View Anywhere"
-        ];
-
+        // --- Process Rotator ---
+        const steps = ["Space Captured", "Model Created", "View Anywhere"];
         let currentIndex = 0;
         const processEl = document.getElementById('process');
         let isAnimating = false;
@@ -945,170 +758,107 @@
         function rotateProcess() {
             if (isAnimating) return;
             isAnimating = true;
-
-            // 1. Trigger Fade Out
             processEl.classList.remove('active');
-
-            // 2. Wait for opacity transition to complete
             const onTransitionEnd = (e) => {
-                // Ignore other property transitions
                 if (e.propertyName !== 'opacity') return;
-                
-                // Cleanup listener
                 processEl.removeEventListener('transitionend', onTransitionEnd);
-                
-                // 3. Swap text content while invisible
                 currentIndex = (currentIndex + 1) % steps.length;
                 processEl.textContent = steps[currentIndex];
-                
-                // 4. Force reflow/repaint
                 void processEl.offsetWidth; 
-                
-                // 5. Trigger Fade In
                 processEl.classList.add('active');
-                
                 isAnimating = false;
             };
-
             processEl.addEventListener('transitionend', onTransitionEnd);
         }
+        setTimeout(() => { processEl.classList.add('active'); setInterval(rotateProcess, 3500); }, 2000);
 
-        setTimeout(() => {
-            processEl.classList.add('active');
-            setInterval(rotateProcess, 3500);
-        }, 2000);
-
-        // Hamburger menu toggle
+        // --- Panel Navigation ---
         const hamburger = document.getElementById('hamburger');
         const mobileMenu = document.getElementById('mobileMenu');
+        const panels = {
+            contact: document.getElementById('contactPanel'),
+            about: document.getElementById('aboutPanel'),
+            howItWorks: document.getElementById('howItWorksPanel')
+        };
 
-        hamburger.addEventListener('click', () => {
-            hamburger.classList.toggle('active');
-            mobileMenu.classList.toggle('active');
-        });
-
-        // Close mobile menu when clicking a link
-        const mobileMenuLinks = mobileMenu.querySelectorAll('a');
-        mobileMenuLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                mobileMenu.classList.remove('active');
-            });
-        });
-
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) {
-                hamburger.classList.remove('active');
-                mobileMenu.classList.remove('active');
-            }
-        });
-
-        // Helper to close all panels
         function closeAllPanels() {
-            contactPanel.classList.remove('active');
-            aboutPanel.classList.remove('active');
-            howItWorksPanel.classList.remove('active');
-            
-            // Close mobile menu if open
+            Object.values(panels).forEach(p => p.classList.remove('active'));
             hamburger.classList.remove('active');
             mobileMenu.classList.remove('active');
         }
 
-        // --- PANEL FUNCTIONALITY ---
-        
-        // 1. Contact Panel
-        const contactTrigger = document.getElementById('contactTrigger');
-        const contactTriggerMobile = document.getElementById('contactTriggerMobile');
-        const contactPanel = document.getElementById('contactPanel');
-        const contactClose = document.getElementById('contactClose');
-        const contactForm = document.getElementById('contactForm');
-
-        function openContactPanel(e) {
-            e.preventDefault();
-            closeAllPanels(); // Close others first
-            setTimeout(() => contactPanel.classList.add('active'), 100);
-        }
-
-        contactTrigger.addEventListener('click', openContactPanel);
-        contactTriggerMobile.addEventListener('click', openContactPanel);
-        contactClose.addEventListener('click', () => contactPanel.classList.remove('active'));
-
-        // 2. About Panel (New)
-        const aboutTrigger = document.getElementById('aboutTrigger');
-        const aboutTriggerMobile = document.getElementById('aboutTriggerMobile');
-        const aboutPanel = document.getElementById('aboutPanel');
-        const aboutClose = document.getElementById('aboutClose');
-
-        function openAboutPanel(e) {
-            e.preventDefault();
+        function togglePanel(panelKey) {
+            const isActive = panels[panelKey].classList.contains('active');
             closeAllPanels();
-            setTimeout(() => aboutPanel.classList.add('active'), 100);
+            if (!isActive) {
+                setTimeout(() => panels[panelKey].classList.add('active'), 50);
+            }
         }
 
-        aboutTrigger.addEventListener('click', openAboutPanel);
-        aboutTriggerMobile.addEventListener('click', openAboutPanel);
-        aboutClose.addEventListener('click', () => aboutPanel.classList.remove('active'));
+        document.getElementById('contactTrigger').onclick = (e) => { e.preventDefault(); togglePanel('contact'); };
+        document.getElementById('contactTriggerMobile').onclick = (e) => { e.preventDefault(); togglePanel('contact'); };
+        document.getElementById('aboutTrigger').onclick = (e) => { e.preventDefault(); togglePanel('about'); };
+        document.getElementById('aboutTriggerMobile').onclick = (e) => { e.preventDefault(); togglePanel('about'); };
+        document.getElementById('howItWorksTrigger').onclick = (e) => { e.preventDefault(); togglePanel('howItWorks'); };
+        document.getElementById('howItWorksTriggerMobile').onclick = (e) => { e.preventDefault(); togglePanel('howItWorks'); };
 
-        // 3. How It Works Panel (New Menu Item)
-        const howItWorksTrigger = document.getElementById('howItWorksTrigger');
-        const howItWorksTriggerMobile = document.getElementById('howItWorksTriggerMobile');
-        const howItWorksPanel = document.getElementById('howItWorksPanel');
-        const howItWorksClose = document.getElementById('howItWorksClose');
+        document.getElementById('contactClose').onclick = closeAllPanels;
+        document.getElementById('aboutClose').onclick = closeAllPanels;
+        document.getElementById('howItWorksClose').onclick = closeAllPanels;
 
-        function openHowItWorksPanel(e) {
-            e.preventDefault();
-            closeAllPanels();
-            setTimeout(() => howItWorksPanel.classList.add('active'), 100);
-        }
+        hamburger.onclick = () => { hamburger.classList.toggle('active'); mobileMenu.classList.toggle('active'); };
 
-        howItWorksTrigger.addEventListener('click', openHowItWorksPanel);
-        howItWorksTriggerMobile.addEventListener('click', openHowItWorksPanel);
-        howItWorksClose.addEventListener('click', () => howItWorksPanel.classList.remove('active'));
-
-
-        // Global Close (Click Outside or Escape)
-        document.addEventListener('click', (e) => {
-            const panels = [contactPanel, aboutPanel, howItWorksPanel];
-            const triggers = [
-                contactTrigger, contactTriggerMobile, 
-                aboutTrigger, aboutTriggerMobile,
-                howItWorksTrigger, howItWorksTriggerMobile
-            ];
-            
-            // Check if click is inside any active panel or any trigger
-            const isInsidePanel = panels.some(p => p.contains(e.target));
-            const isTrigger = triggers.some(t => t.contains(e.target));
-
-            if (!isInsidePanel && !isTrigger) {
-                // Check if any panel is actually active before trying to remove classes
-                if (panels.some(p => p.classList.contains('active'))) {
+        // --- Click Outside to Close Fix ---
+        document.addEventListener('mousedown', (e) => {
+            const activePanel = Object.values(panels).find(p => p.classList.contains('active'));
+            if (activePanel) {
+                // If clicking outside the panel AND not clicking on a trigger element
+                const isClickInPanel = activePanel.contains(e.target);
+                const isClickOnTrigger = e.target.closest('.nav-menu') || e.target.closest('.mobile-menu') || e.target.closest('.hamburger');
+                
+                if (!isClickInPanel && !isClickOnTrigger) {
                     closeAllPanels();
                 }
             }
         });
 
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeAllPanels();
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAllPanels(); });
+
+        // --- Web3Forms Logic ---
+        const contactForm = document.getElementById('contactForm');
+        const submitBtn = contactForm.querySelector('button[type="submit"]');
+
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const ACCESS_KEY = "c209b028-5eac-46db-9c5e-035297174590";
+            const formData = new FormData(contactForm);
+            formData.set("access_key", ACCESS_KEY);
+
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = "Sending...";
+            submitBtn.disabled = true;
+
+            try {
+                const response = await fetch("https://api.web3forms.com/submit", {
+                    method: "POST",
+                    headers: { "Accept": "application/json" },
+                    body: formData
+                });
+                const data = await response.json();
+                if (data.success) {
+                    alert("Success! Your message has been sent.");
+                    contactForm.reset();
+                    closeAllPanels();
+                } else {
+                    alert("Error: " + data.message);
+                }
+            } catch (err) {
+                alert("Something went wrong. Please try again.");
+            } finally {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
             }
         });
-
-        // Handle form submission
-        contactForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            // Get form values
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const phone = document.getElementById('phone').value;
-            const project = document.getElementById('project').value;
-
-            console.log('Form submitted:', { name, email, phone, project });
-            alert('Thank you for reaching out! We\'ll get back to you soon.');
-            contactForm.reset();
-            contactPanel.classList.remove('active');
-        });
     </script>
-
 </body>
 </html>
